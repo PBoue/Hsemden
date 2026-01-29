@@ -1,73 +1,105 @@
-import { Card } from '@/app/components/ui/card';
+import { motion } from 'motion/react';
 
 export function ResearchQuestionsSlide() {
   const questions = [
     {
       id: 'RQ1',
-      title: 'Ausgangslage und Akteurslandschaft',
-      description:
-        'Welche Infrastruktur, Netzwerke, Regularien, Institutionen und Akteursgruppen wirken im regionalen Kinderschutzkontext?',
+      title: 'Ausgangslage & Akteurslandschaft',
+      description: 'Infrastruktur, Netzwerke, Regularien, Institutionen',
+      color: 'bg-chart-1',
     },
     {
       id: 'RQ2',
-      title: 'Organisation und Prozesse',
-      description:
-        'Welche Problemlagen, Engpässe und Qualitätsrisiken werden entlang typischer Arbeits- und Fallprozesse berichtet?',
+      title: 'Organisation & Prozesse',
+      description: 'Problemlagen, Engpässe, Qualitätsrisiken',
+      color: 'bg-chart-2',
     },
     {
       id: 'RQ3',
-      title: 'Daten- und Systemrealität',
-      description:
-        'Welche Datenarten, Dokumentationspraktiken und Systemlandschaften prägen die Fallbearbeitung?',
+      title: 'Daten & Systemrealität',
+      description: 'Dokumentationspraktiken, Systemlandschaften',
+      color: 'bg-chart-3',
     },
     {
       id: 'RQ4',
-      title: 'Akzeptanz, Verantwortung, Schutz',
-      description:
-        'Unter welchen Bedingungen wird digitale bzw. KI-gestützte Unterstützung akzeptiert?',
+      title: 'Akzeptanz & Verantwortung',
+      description: 'Bedingungen für digitale/KI-gestützte Unterstützung',
+      color: 'bg-chart-4',
     },
     {
       id: 'RQ5',
-      title: 'Hypothesenprüfung in Prototypen',
-      description:
-        'Welche Use-Case-Hypothesen lassen sich ableiten und in kontrollierten Erprobungen validieren?',
+      title: 'Hypothesenprüfung',
+      description: 'Use-Case-Validierung in Prototypen',
+      color: 'bg-chart-5',
     },
     {
       id: 'RQ6',
-      title: 'Transfer und Implementierung',
-      description:
-        'Welche Bedingungen werden für nachhaltige Einführung im regionalen Netzwerk als erforderlich beschrieben?',
+      title: 'Transfer & Implementierung',
+      description: 'Nachhaltige Einführung im regionalen Netzwerk',
+      color: 'bg-primary',
     },
   ];
 
   return (
-    <div className="min-h-full p-12">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-medium">Forschungsfragen</h1>
-          <p className="text-muted-foreground text-lg">
+    <div className="min-h-full p-8 md:p-16 bg-background">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-3"
+        >
+          <div className="inline-block px-4 py-2 bg-muted rounded">
+            <span className="text-sm font-medium tracking-wide text-muted-foreground">02 — STRUKTUR</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+            Forschungsfragen
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl">
             Sechs zentrale Fragen strukturieren das explorative Vorgehen
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {questions.map((q) => (
-            <Card key={q.id} className="p-6 space-y-3 hover:border-primary/50 transition-colors">
-              <div className="flex items-baseline gap-3">
-                <span className="text-sm font-medium text-primary">{q.id}</span>
-                <h3 className="font-medium flex-1">{q.title}</h3>
+        {/* Questions Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {questions.map((q, index) => (
+            <motion.div
+              key={q.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+              className="group"
+            >
+              <div className="h-full bg-card border-2 border-border rounded-lg overflow-hidden hover:border-foreground transition-colors">
+                <div className={`${q.color} p-6 text-white`}>
+                  <div className="text-4xl font-bold">{q.id}</div>
+                </div>
+                <div className="p-6 space-y-3">
+                  <h3 className="text-xl font-bold text-foreground leading-tight">
+                    {q.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {q.description}
+                  </p>
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground">{q.description}</p>
-            </Card>
+            </motion.div>
           ))}
         </div>
 
-        <Card className="p-6 bg-muted/50">
+        {/* Bottom Note */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="bg-muted p-6 rounded-lg"
+        >
           <p className="text-sm text-muted-foreground">
-            <strong>Logik:</strong> Von der Kontextaufnahme über Anforderungsspezifikation
+            <strong className="text-foreground">Logik:</strong> Von der Kontextaufnahme über Anforderungsspezifikation
             und prototypische Validierung bis zur Transfer- und Implementierungsplanung
           </p>
-        </Card>
+        </motion.div>
       </div>
     </div>
   );

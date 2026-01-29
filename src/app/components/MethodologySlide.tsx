@@ -1,97 +1,156 @@
-import { Card } from '@/app/components/ui/card';
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export function MethodologySlide() {
+  const phases = [
+    {
+      number: '01',
+      title: 'Qualitative Exploration',
+      color: 'bg-chart-1',
+      items: [
+        'Leitfadengestützte Interviews',
+        'Stakeholder-Mapping',
+        'Dokumentenanalyse',
+        'Kontextmodellierung',
+      ],
+    },
+    {
+      number: '02',
+      title: 'Artefaktbasierte Iterationen',
+      color: 'bg-chart-2',
+      items: [
+        'Prototypen (Low → High Fidelity)',
+        'User Journeys',
+        'Designsystem',
+        'Architekturbausteine',
+      ],
+    },
+    {
+      number: '03',
+      title: 'Quantitative Validierung',
+      color: 'bg-chart-3',
+      items: [
+        'Usability-Metriken (ISO 9241-11)',
+        'Akzeptanzskalen',
+        'Aufgabenbasierte Tests',
+        'Wirksamkeitsanalyse',
+      ],
+    },
+  ];
+
+  const translationChain = [
+    'Feldbefund',
+    'Anforderung',
+    'Artefakt',
+    'Test',
+    'Übergabe',
+  ];
+
   return (
-    <div className="min-h-full p-12">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-medium">Forschungsstrategie & Methodik</h1>
-          <p className="text-muted-foreground text-lg">
-            Sequenziell-exploratives Mixed-Methods-Design
+    <div className="min-h-full p-8 md:p-16 bg-background">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-3"
+        >
+          <div className="inline-block px-4 py-2 bg-muted rounded">
+            <span className="text-sm font-medium tracking-wide text-muted-foreground">03 — METHODIK</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+            Mixed-Methods-Design
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl">
+            Sequenziell-exploratives Vorgehen in drei Phasen
           </p>
-        </div>
+        </motion.div>
 
+        {/* Phases */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 space-y-4">
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-primary">Phase 1</div>
-              <h3 className="font-medium">Qualitative Exploration</h3>
-            </div>
-            <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>• Leitfadengestützte Interviews</li>
-              <li>• Stakeholder-Mapping</li>
-              <li>• Dokumentenanalyse</li>
-              <li>• Kontextmodellierung</li>
-            </ul>
-          </Card>
-
-          <Card className="p-6 space-y-4">
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-primary">Phase 2</div>
-              <h3 className="font-medium">Artefaktbasierte Iterationen</h3>
-            </div>
-            <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>• Prototypen (Low → High Fidelity)</li>
-              <li>• User Journeys</li>
-              <li>• Designsystem</li>
-              <li>• Architekturbausteine</li>
-            </ul>
-          </Card>
-
-          <Card className="p-6 space-y-4">
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-primary">Phase 3</div>
-              <h3 className="font-medium">Quantitative Validierung</h3>
-            </div>
-            <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>• Usability-Metriken (ISO 9241-11)</li>
-              <li>• Akzeptanzskalen</li>
-              <li>• Aufgabenbasierte Tests</li>
-              <li>• Wirksamkeitsanalyse</li>
-            </ul>
-          </Card>
-        </div>
-
-        <div className="space-y-4 pt-4">
-          <h3 className="font-medium">Normativer Referenzrahmen</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="p-5 space-y-2">
-              <h4 className="text-sm font-medium">Menschenzentrierter Prozess</h4>
-              <p className="text-sm text-muted-foreground">
-                DIN EN ISO 9241-210/220 als Gestaltungslogik: Nutzungskontext verstehen,
-                Anforderungen spezifizieren, Lösungen entwerfen, iterativ evaluieren
-              </p>
-            </Card>
-
-            <Card className="p-5 space-y-2">
-              <h4 className="text-sm font-medium">Wissenschaftliche Praxis & Datenschutz</h4>
-              <p className="text-sm text-muted-foreground">
-                DFG-Kodex, HS Emden/Leer GWP-Ordnung, DSGVO Art. 89, § 13 NDSG als
-                verbindliche Standards
-              </p>
-            </Card>
-          </div>
-        </div>
-
-        <Card className="p-6 bg-primary/5 border-primary/20">
-          <div className="flex items-center gap-4">
-            <div className="flex-1 space-y-2">
-              <h3 className="font-medium">Kernprinzip: Übersetzungskette</h3>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
-                <span>Feldbefund</span>
-                <ArrowRight className="h-4 w-4" />
-                <span>Anforderung</span>
-                <ArrowRight className="h-4 w-4" />
-                <span>Artefakt</span>
-                <ArrowRight className="h-4 w-4" />
-                <span>Test</span>
-                <ArrowRight className="h-4 w-4" />
-                <span>Übergabe</span>
+          {phases.map((phase, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+            >
+              <div className="h-full bg-card border-2 border-border rounded-lg overflow-hidden">
+                <div className={`${phase.color} p-6 text-white`}>
+                  <div className="text-sm font-medium tracking-wide opacity-90 mb-2">PHASE</div>
+                  <div className="text-5xl font-bold mb-4">{phase.number}</div>
+                  <div className="text-xl font-bold">{phase.title}</div>
+                </div>
+                <div className="p-6">
+                  <ul className="space-y-2" role="list">
+                    {phase.items.map((item, idx) => (
+                      <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-foreground mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Translation Chain */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="bg-primary text-primary-foreground p-8 rounded-lg"
+        >
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <div className="text-sm font-medium tracking-wide opacity-90">KERNPRINZIP</div>
+              <h2 className="text-3xl font-bold">Übersetzungskette</h2>
+            </div>
+            <div className="flex items-center gap-3 flex-wrap" role="list">
+              {translationChain.map((step, index) => (
+                <div key={index} className="flex items-center gap-3" role="listitem">
+                  <div className="px-4 py-2 bg-white/10 rounded font-medium">
+                    {step}
+                  </div>
+                  {index < translationChain.length - 1 && (
+                    <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-        </Card>
+        </motion.div>
+
+        {/* Standards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          <div className="bg-card border-2 border-border p-6 rounded-lg">
+            <div className="space-y-3">
+              <div className="text-sm font-medium tracking-wide text-muted-foreground">GESTALTUNGSLOGIK</div>
+              <h3 className="text-xl font-bold text-foreground">Menschenzentriert</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                DIN EN ISO 9241-210/220 • Nutzungskontext verstehen, Anforderungen spezifizieren, Lösungen entwerfen, iterativ evaluieren
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-card border-2 border-border p-6 rounded-lg">
+            <div className="space-y-3">
+              <div className="text-sm font-medium tracking-wide text-muted-foreground">VERBINDLICHE STANDARDS</div>
+              <h3 className="text-xl font-bold text-foreground">Wissenschaftspraxis</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                DFG-Kodex • HS Emden/Leer GWP-Ordnung • DSGVO Art. 89 • § 13 NDSG
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
