@@ -1,5 +1,6 @@
-import { Card } from '@/app/components/ui/card';
-import { Shield, Lock, Eye, AlertTriangle } from 'lucide-react';
+import { Shield, Lock, Eye } from 'lucide-react';
+import { motion } from 'motion/react';
+import { cn } from '@/lib/utils';
 
 export function DataProtectionSlide() {
   const stages = [
@@ -8,145 +9,183 @@ export function DataProtectionSlide() {
       label: 'Exploration',
       description: 'Ohne Betroffene/Kinder, ohne Realfalldaten',
       risk: 'minimal',
+      riskColor: 'bg-green-600',
     },
     {
       stage: 1,
       label: 'Geschlossene Tests',
-      description: 'Mit Professionellen, synthetische/abstrahierte Fälle',
+      description: 'Mit Professionellen, synthetische Fälle',
       risk: 'niedrig',
+      riskColor: 'bg-blue-600',
     },
     {
       stage: 2,
       label: 'Betroffeneneinbezug',
-      description: 'Familienvertretungen in kontrollierten Formaten',
+      description: 'Familienvertretungen, kontrolliert',
       risk: 'mittel',
+      riskColor: 'bg-yellow-600',
     },
     {
       stage: 3,
       label: 'Kindereinbezug',
-      description: 'Nur nach dokumentierter Risikoreduktion',
+      description: 'Nach dokumentierter Risikoreduktion',
       risk: 'erhöht',
+      riskColor: 'bg-red-600',
     },
     {
       stage: 4,
       label: 'Erweiterte Nutzung',
       description: 'Nach definierten Gate-Kriterien',
       risk: 'kontrolliert',
+      riskColor: 'bg-muted-foreground',
     },
   ];
 
   return (
-    <div className="min-h-full p-12">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-medium">Datenschutz & Ethik</h1>
-          <p className="text-muted-foreground text-lg">
-            Risikosensitive Erhebungs- und Erprobungsformen mit besonderem Schutzkonzept
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Shield className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="font-medium">Rechtliche Grundlagen</h3>
-            </div>
-            <ul className="text-sm text-muted-foreground space-y-2">
-              <li>
-                <strong>DSGVO Art. 89:</strong> Garantien für Forschung (Datenminimierung,
-                technische/organisatorische Maßnahmen)
-              </li>
-              <li>
-                <strong>§ 13 NDSG:</strong> Zusätzlicher Rahmen für Niedersachsen
-              </li>
-              <li>
-                <strong>DFG-Kodex & HS-GWP:</strong> Gute wissenschaftliche Praxis
-              </li>
-            </ul>
-          </Card>
-
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-chart-2/10 rounded-lg">
-                <Lock className="h-5 w-5 text-chart-2" />
-              </div>
-              <h3 className="font-medium">Technische Maßnahmen</h3>
-            </div>
-            <ul className="text-sm text-muted-foreground space-y-2">
-              <li>• Datenminimierung ab erstem Kontakt</li>
-              <li>• Trennung identifizierender Merkmale</li>
-              <li>• Frühestmögliche Anonymisierung</li>
-              <li>• Restriktive Zugriffs- und Rollenkonzepte</li>
-              <li>• Logging, Monitoring, Incident-Management</li>
-            </ul>
-          </Card>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="h-5 w-5 text-destructive" />
-            <h3 className="font-medium">
-              Stufenmodell: Beteiligung Betroffener und von Kindern
-            </h3>
+    <div className="min-h-full p-8 md:p-16 bg-background">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-3"
+        >
+          <div className="inline-block px-4 py-2 bg-muted rounded">
+            <span className="text-sm font-medium tracking-wide text-muted-foreground">06 — SCHUTZ</span>
           </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+            Datenschutz & Ethik
+          </h1>
+        </motion.div>
 
-          <div className="space-y-3">
-            {stages.map((s) => (
-              <Card
+        {/* Legal & Technical */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="h-full bg-chart-1 text-white p-8 rounded-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <Shield className="h-8 w-8" aria-hidden="true" />
+                <div>
+                  <div className="text-sm font-medium tracking-wide opacity-90">RECHTLICH</div>
+                  <h2 className="text-2xl font-bold">Grundlagen</h2>
+                </div>
+              </div>
+              <ul className="space-y-3 text-sm" role="list">
+                <li className="leading-relaxed">
+                  <strong>DSGVO Art. 89:</strong> Garantien für Forschung (Datenminimierung, technische/organisatorische Maßnahmen)
+                </li>
+                <li className="leading-relaxed">
+                  <strong>§ 13 NDSG:</strong> Zusätzlicher Rahmen für Niedersachsen
+                </li>
+                <li className="leading-relaxed">
+                  <strong>DFG-Kodex & HS-GWP:</strong> Gute wissenschaftliche Praxis
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="h-full bg-card border-2 border-border p-8 rounded-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <Lock className="h-8 w-8 text-chart-2" aria-hidden="true" />
+                <div>
+                  <div className="text-sm font-medium tracking-wide text-muted-foreground">TECHNISCH</div>
+                  <h2 className="text-2xl font-bold text-foreground">Maßnahmen</h2>
+                </div>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground" role="list">
+                <li className="flex items-start gap-2">
+                  <span className="text-chart-2 mt-1 font-bold">•</span>
+                  <span>Datenminimierung ab erstem Kontakt</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chart-2 mt-1 font-bold">•</span>
+                  <span>Trennung identifizierender Merkmale</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chart-2 mt-1 font-bold">•</span>
+                  <span>Frühestmögliche Anonymisierung</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chart-2 mt-1 font-bold">•</span>
+                  <span>Restriktive Zugriffs- und Rollenkonzepte</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-chart-2 mt-1 font-bold">•</span>
+                  <span>Logging, Monitoring, Incident-Management</span>
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Stage Model */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="space-y-6"
+        >
+          <h2 className="text-2xl font-bold text-foreground">
+            5-Stufenmodell: Beteiligung Betroffener und Kinder
+          </h2>
+
+          <div className="space-y-3" role="list">
+            {stages.map((s, index) => (
+              <div
                 key={s.stage}
-                className={`p-4 ${
-                  s.risk === 'minimal' || s.risk === 'niedrig'
-                    ? 'bg-muted/30'
-                    : s.risk === 'erhöht'
-                    ? 'border-destructive/30'
-                    : ''
-                }`}
+                className="bg-card border-2 border-border rounded-lg overflow-hidden"
               >
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-medium">
-                    {s.stage}
+                <div className="flex items-stretch">
+                  <div className={cn("w-24 flex items-center justify-center", s.riskColor)}>
+                    <span className="text-4xl font-bold text-white">{s.stage}</span>
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <h4 className="font-medium">{s.label}</h4>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          s.risk === 'minimal'
-                            ? 'bg-green-100 text-green-700'
-                            : s.risk === 'niedrig'
-                            ? 'bg-blue-100 text-blue-700'
-                            : s.risk === 'mittel'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : s.risk === 'erhöht'
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-muted text-muted-foreground'
-                        }`}
-                      >
-                        Risiko: {s.risk}
-                      </span>
+                  <div className="flex-1 p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-foreground mb-1">{s.label}</h3>
+                        <p className="text-sm text-muted-foreground">{s.description}</p>
+                      </div>
+                      <div className={cn(
+                        "px-3 py-1.5 rounded font-bold text-xs text-white flex-shrink-0",
+                        s.riskColor
+                      )}>
+                        {s.risk.toUpperCase()}
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">{s.description}</p>
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <Card className="p-6 bg-muted/50 border-l-4 border-l-primary">
-          <div className="flex items-start gap-3">
-            <Eye className="h-5 w-5 text-primary mt-0.5" />
-            <div className="space-y-1 flex-1">
-              <h4 className="text-sm font-medium">Gate-Kriterien für Stufenübergänge</h4>
-              <p className="text-sm text-muted-foreground">
-                Datenschutz-Compliance, Sicherheitsbewertung, Akzeptanznachweise,
-                dokumentiertes Fehlermanagement – nur nach Erfüllung erfolgt Freigabe
+        {/* Gate Criteria */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="bg-muted p-8 rounded-lg"
+        >
+          <div className="flex items-start gap-4">
+            <Eye className="h-8 w-8 text-foreground flex-shrink-0 mt-1" aria-hidden="true" />
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold text-foreground">Gate-Kriterien für Stufenübergänge</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Datenschutz-Compliance • Sicherheitsbewertung • Akzeptanznachweise •
+                Dokumentiertes Fehlermanagement — Nur nach Erfüllung erfolgt Freigabe
               </p>
             </div>
           </div>
-        </Card>
+        </motion.div>
       </div>
     </div>
   );

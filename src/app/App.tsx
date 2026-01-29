@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Home } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
+import { ThemeProvider } from '@/app/components/theme-provider';
+import { ThemeToggle } from '@/app/components/theme-toggle';
 import { TitleSlide } from '@/app/components/TitleSlide';
 import { ProblemContextSlide } from '@/app/components/ProblemContextSlide';
 import { ResearchQuestionsSlide } from '@/app/components/ResearchQuestionsSlide';
@@ -11,6 +12,7 @@ import { DataProtectionSlide } from '@/app/components/DataProtectionSlide';
 import { InterdisciplinarySlide } from '@/app/components/InterdisciplinarySlide';
 import { TimelineSlide } from '@/app/components/TimelineSlide';
 import { ClosingSlide } from '@/app/components/ClosingSlide';
+import { cn } from '@/lib/utils';
 
 const slides = [
   { component: TitleSlide, title: 'Titel' },
@@ -25,7 +27,7 @@ const slides = [
   { component: ClosingSlide, title: 'Zusammenfassung' },
 ];
 
-export default function App() {
+function PresentationContent() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
@@ -75,62 +77,84 @@ export default function App() {
       </div>
 
       {/* Navigation Bar */}
-      <div className="border-t border-border bg-card">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
+      <nav
+        className="border-t border-border bg-card"
+        role="navigation"
+        aria-label="Presentation navigation"
+      >
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <button
               onClick={() => setCurrentSlide(0)}
               disabled={currentSlide === 0}
-              className="gap-2"
+              className={cn(
+                "inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50",
+              )}
+              aria-label="Go to first slide"
             >
               <Home className="h-4 w-4" />
-            </Button>
-            <span className="text-sm text-muted-foreground">
-              {currentSlide + 1} / {slides.length}
+            </button>
+            <span className="text-sm text-muted-foreground" aria-live="polite" aria-atomic="true">
+              Folie {currentSlide + 1} von {slides.length}
             </span>
           </div>
 
           <div className="flex-1 mx-8 max-w-2xl">
-            <div className="flex gap-1">
-              {slides.map((_, index) => (
+            <div className="flex gap-1" role="tablist" aria-label="Slide progress">
+              {slides.map((slide, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`flex-1 h-1.5 rounded-full transition-colors ${
+                  role="tab"
+                  aria-selected={index === currentSlide}
+                  aria-label={`Go to slide ${index + 1}: ${slide.title}`}
+                  className={cn(
+                    "flex-1 h-1.5 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                     index === currentSlide
-                      ? 'bg-primary'
+                      ? "bg-primary"
                       : index < currentSlide
-                      ? 'bg-muted-foreground/30'
-                      : 'bg-muted'
-                  }`}
-                  title={slides[index].title}
+                      ? "bg-muted-foreground/30"
+                      : "bg-muted"
+                  )}
+                  title={slide.title}
                 />
               ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={prevSlide}
               disabled={currentSlide === 0}
+              className={cn(
+                "inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
+              )}
+              aria-label="Previous slide"
             >
               <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
+            </button>
+            <button
               onClick={nextSlide}
               disabled={currentSlide === slides.length - 1}
+              className={cn(
+                "inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
+              )}
+              aria-label="Next slide"
             >
               <ChevronRight className="h-4 w-4" />
-            </Button>
+            </button>
+            <ThemeToggle />
           </div>
         </div>
-      </div>
+      </nav>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <PresentationContent />
+    </ThemeProvider>
   );
 }
