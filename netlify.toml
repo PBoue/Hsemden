@@ -1,0 +1,20 @@
+[build]
+  command = "pnpm build:static"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "9.15.0"
+
+# SPA fallback for client-side routing.
+# Pre-rendered pages (e.g. /slides/3/index.html) will still be served when they exist.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache hashed assets aggressively.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

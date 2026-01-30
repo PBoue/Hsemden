@@ -1,7 +1,2 @@
-
-  import { createRoot } from "react-dom/client";
-  import App from "./app/App.tsx";
-  import "./styles/index.css";
-
-  createRoot(document.getElementById("root")!).render(<App />);
-  
+// Legacy entrypoint. The app now uses `src/entry-client.tsx`.
+import './entry-client';
