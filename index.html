@@ -11,11 +11,25 @@
             name="description"
             content="Forschungsdesign-Präsentation für das DigiChildProtect-Projekt an der Hochschule Emden/Leer."
         />
-        <!-- Netlify Identity Widget for authentication -->
-        <script
-            type="text/javascript"
-            src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-        ></script>
+        <!-- Critical CSS for no-JS mode: show hidden animated elements -->
+        <noscript>
+            <style>
+                /* Show elements that are hidden via framer-motion initial state */
+                [style*='opacity: 0'],
+                [style*='opacity:0'] {
+                    opacity: 1 !important;
+                    transform: none !important;
+                }
+                /* Hide JS-only navigation elements */
+                .js-only {
+                    display: none !important;
+                }
+                /* Show no-JS navigation */
+                .nojs-nav {
+                    display: block !important;
+                }
+            </style>
+        </noscript>
     </head>
 
     <body>
@@ -45,26 +59,38 @@
             <textarea name="message"></textarea>
         </form>
 
+        <!-- No-JS navigation bar (hidden when JS is enabled) -->
         <noscript>
-            <div
+            <nav
                 style="
-                    padding: 2rem;
-                    text-align: center;
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: #fff;
+                    border-top: 1px solid #e5e7eb;
+                    padding: 0.75rem 1rem;
+                    z-index: 50;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
                     font-family: system-ui, sans-serif;
                 "
             >
-                <h1>JavaScript erforderlich</h1>
-                <p>
-                    Diese Präsentation benötigt JavaScript. Bitte aktivieren Sie
-                    JavaScript in Ihrem Browser.
-                </p>
-                <p style="margin-top: 1rem; color: #666">
-                    <em
-                        >This presentation requires JavaScript. Please enable
-                        JavaScript in your browser.</em
-                    >
-                </p>
-            </div>
+                <a
+                    href="/"
+                    style="color: #3b82f6; text-decoration: none"
+                    >← Start</a
+                >
+                <a
+                    href="/navigation/"
+                    style="color: #3b82f6; text-decoration: none"
+                    >Alle Folien</a
+                >
+                <span style="color: #6b7280; font-size: 0.875rem"
+                    >Ohne JavaScript</span
+                >
+            </nav>
         </noscript>
 
         <div id="root"><!--app-html--></div>

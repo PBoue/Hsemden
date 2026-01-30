@@ -29,6 +29,7 @@ import { ThankYouSlide } from '@/app/components/ThankYouSlide';
 import { BibliographyPage } from '@/app/components/BibliographyPage';
 import { GlossaryPage } from '@/app/components/GlossaryPage';
 import { ContactPage } from '@/app/components/ContactPage';
+import { NavigationPage } from '@/app/components/NavigationPage';
 
 const slides = [
     {
@@ -190,6 +191,10 @@ function AppRoutes() {
                         onNavigateToMeta={navigateToMeta}
                     />
                 }
+            />
+            <Route
+                path="/navigation"
+                element={<NavigationPage />}
             />
             <Route
                 path="*"

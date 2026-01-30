@@ -16,6 +16,7 @@ export function getPrerenderRoutes(): string[] {
         '/bibliography',
         '/glossary',
         '/contact',
+        '/navigation', // No-JS navigation page
     ];
 }
 
