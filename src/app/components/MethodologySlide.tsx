@@ -253,321 +253,34 @@ export function MethodologySlide() {
                         3. Iterativer Design-Thinking-Prozess
                     </h2>
 
-                    {/* Linear Process Visualization inspired by NN/g */}
+                    {/* Design Thinking Process Image from TU Dortmund */}
                     <div className="relative w-full">
-                        {/* Main container */}
                         <div
                             className="relative mx-auto"
-                            style={{ maxWidth: '1200px' }}
+                            style={{ maxWidth: '1000px' }}
                         >
-                            {/* Feedback Arrows - using absolute positioned SVG */}
-                            <div
-                                className="relative w-full"
-                                style={{ height: '80px' }}
-                            >
-                                <svg
-                                    className="absolute inset-0 w-full h-full"
-                                    viewBox="0 0 600 80"
-                                    preserveAspectRatio="xMidYMid meet"
-                                >
-                                    <defs>
-                                        <marker
-                                            id="arrowhead"
-                                            markerWidth="10"
-                                            markerHeight="7"
-                                            refX="9"
-                                            refY="3.5"
-                                            orient="auto"
-                                        >
-                                            <polygon
-                                                points="0 0, 10 3.5, 0 7"
-                                                fill="#888"
-                                            />
-                                        </marker>
-                                    </defs>
-
-                                    {/* Phase positions: 50, 150, 250, 350, 450, 550 */}
-
-                                    {/* Short arcs - between adjacent phases */}
-                                    <path
-                                        d="M 150 75 Q 100 45, 50 75"
-                                        fill="none"
-                                        stroke="#777"
-                                        strokeWidth="2"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 250 75 Q 200 45, 150 75"
-                                        fill="none"
-                                        stroke="#777"
-                                        strokeWidth="2"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 350 75 Q 300 45, 250 75"
-                                        fill="none"
-                                        stroke="#777"
-                                        strokeWidth="2"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 450 75 Q 400 45, 350 75"
-                                        fill="none"
-                                        stroke="#777"
-                                        strokeWidth="2"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 550 75 Q 500 45, 450 75"
-                                        fill="none"
-                                        stroke="#777"
-                                        strokeWidth="2"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-
-                                    {/* Medium arcs - 2 phases back */}
-                                    <path
-                                        d="M 250 70 Q 150 20, 50 70"
-                                        fill="none"
-                                        stroke="#999"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 350 70 Q 250 20, 150 70"
-                                        fill="none"
-                                        stroke="#999"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 450 70 Q 350 20, 250 70"
-                                        fill="none"
-                                        stroke="#999"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                    <path
-                                        d="M 550 70 Q 450 20, 350 70"
-                                        fill="none"
-                                        stroke="#999"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-
-                                    {/* Large arc - Testing → Define */}
-                                    <path
-                                        d="M 550 65 Q 400 5, 250 65"
-                                        fill="none"
-                                        stroke="#aaa"
-                                        strokeWidth="1.2"
-                                        markerEnd="url(#arrowhead)"
-                                    />
-                                </svg>
-                            </div>
-
-                            {/* Phase Circles Row */}
-                            <div className="flex items-center justify-between px-2 mb-6">
-                                {designThinkingPhases.map((phase, index) => {
-                                    const IconComponent = phase.icon;
-                                    const colors = [
-                                        'hsl(var(--chart-1))',
-                                        'hsl(var(--chart-2))',
-                                        'hsl(var(--chart-3))',
-                                        'hsl(var(--chart-4))',
-                                        'hsl(var(--chart-5))',
-                                        'hsl(var(--destructive))',
-                                    ];
-                                    const color = colors[index];
-
-                                    return (
-                                        <motion.div
-                                            key={index}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{
-                                                duration: 0.5,
-                                                delay: 0.3 + index * 0.1,
-                                            }}
-                                            className="flex flex-col items-center gap-2 flex-1"
-                                        >
-                                            {/* Phase Title Above Circle */}
-                                            <div
-                                                className="text-xs font-bold uppercase tracking-wide text-center mb-1"
-                                                style={{ color }}
-                                            >
-                                                {phase.title}
-                                            </div>
-
-                                            {/* Circle with Icon */}
-                                            <div className="relative">
-                                                <motion.div
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
-                                                    transition={{
-                                                        duration: 0.5,
-                                                        delay:
-                                                            0.5 + index * 0.1,
-                                                        type: 'spring',
-                                                    }}
-                                                    className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-background border-4 flex items-center justify-center shadow-md"
-                                                    style={{
-                                                        borderColor: color,
-                                                    }}
-                                                >
-                                                    <IconComponent
-                                                        className="w-8 h-8 md:w-10 md:h-10"
-                                                        style={{ color }}
-                                                        strokeWidth={1.5}
-                                                    />
-                                                </motion.div>
-                                            </div>
-
-                                            {/* Phase Number Below Circle */}
-                                            <div className="text-xs font-mono font-medium text-muted-foreground mt-1">
-                                                {phase.number}
-                                            </div>
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Process Stage Labels (Problemraum, Lösungsraum, Validierung) */}
-                            <div className="flex items-stretch mb-6">
-                                {/* Problemraum - spans 2 phases (Understand + Observe) */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 2.8 }}
-                                    className="flex-1"
-                                    style={{ flexBasis: '33.33%' }}
-                                >
-                                    <div className="bg-muted/50 rounded px-3 py-2 text-center mx-1">
-                                        <div className="text-xs md:text-sm font-bold uppercase tracking-wide text-foreground">
-                                            Problemraum
-                                        </div>
-                                    </div>
-                                </motion.div>
-
-                                {/* Lösungsraum - spans 3 phases (Define + Find Ideas + Develop) */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 3 }}
-                                    className="flex-1"
-                                    style={{ flexBasis: '50%' }}
-                                >
-                                    <div className="bg-muted/50 rounded px-3 py-2 text-center mx-1">
-                                        <div className="text-xs md:text-sm font-bold uppercase tracking-wide text-foreground">
-                                            Lösungsraum
-                                        </div>
-                                    </div>
-                                </motion.div>
-
-                                {/* Validierung - spans 1 phase (Testing) */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 3.2 }}
-                                    className="flex-1"
-                                    style={{ flexBasis: '16.67%' }}
-                                >
-                                    <div className="bg-muted/50 rounded px-3 py-2 text-center mx-1">
-                                        <div className="text-xs md:text-sm font-bold uppercase tracking-wide text-foreground">
-                                            Validierung
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Legend */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-muted-foreground pt-4 border-t border-border">
-                        <div className="flex items-center gap-2">
-                            <svg
-                                width="32"
-                                height="16"
-                                className="flex-shrink-0"
-                            >
-                                <path
-                                    d="M 28 14 Q 16 4, 4 14"
-                                    fill="none"
-                                    stroke="hsl(var(--muted-foreground))"
-                                    strokeWidth="2"
-                                    opacity="0.5"
-                                />
-                                <polygon
-                                    points="4 14, 6 12, 6 16"
-                                    fill="hsl(var(--muted-foreground))"
-                                    opacity="0.5"
-                                />
-                            </svg>
-                            <span>Kurze Iteration (benachbarte Phasen)</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <svg
-                                width="48"
-                                height="16"
-                                className="flex-shrink-0"
-                            >
-                                <path
-                                    d="M 44 14 Q 24 3, 4 14"
-                                    fill="none"
-                                    stroke="hsl(var(--muted-foreground))"
-                                    strokeWidth="2"
-                                    opacity="0.4"
-                                />
-                                <polygon
-                                    points="4 14, 6 12, 6 16"
-                                    fill="hsl(var(--muted-foreground))"
-                                    opacity="0.4"
-                                />
-                            </svg>
-                            <span>Mittlere Iteration (2-3 Phasen zurück)</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <svg
-                                width="56"
-                                height="16"
-                                className="flex-shrink-0"
-                            >
-                                <path
-                                    d="M 52 14 Q 28 2, 4 14"
-                                    fill="none"
-                                    stroke="hsl(var(--muted-foreground))"
-                                    strokeWidth="1.5"
-                                    opacity="0.35"
-                                />
-                                <polygon
-                                    points="4 14, 6 12, 6 16"
-                                    fill="hsl(var(--muted-foreground))"
-                                    opacity="0.35"
-                                />
-                            </svg>
-                            <span>
-                                Große Iteration (fundamentale Überarbeitung)
-                            </span>
+                            <img
+                                src="https://cet.tu-dortmund.de/storages/cet/_processed_/d/b/csm_Der_Design_Thinking_Prozess_89353704dd.jpg"
+                                alt="Der Design Thinking Prozess - 6 Phasen: Verstehen, Beobachten, Sichtweise definieren, Ideen finden, Prototypen entwickeln, Testen"
+                                className="w-full h-auto rounded-lg shadow-md"
+                            />
                         </div>
                     </div>
 
                     {/* Source Attribution */}
                     <div className="text-xs text-muted-foreground pt-2 border-t border-border">
                         <p>
-                            <strong>Prozessmodell:</strong> HPI d.school
-                            (Understand, Observe, Define point of view, Find
-                            ideas, Develop prototypes, Testing) •{' '}
-                            <strong>Visualisierung inspiriert von:</strong>{' '}
-                            Nielsen Norman Group – Design Thinking 101 (
+                            <strong>Abbildung:</strong> TU Dortmund, Center for
+                            Entrepreneurship & Transfer (
                             <a
-                                href="https://www.nngroup.com/articles/design-thinking/"
+                                href="https://cet.tu-dortmund.de/storages/cet/_processed_/d/b/csm_Der_Design_Thinking_Prozess_89353704dd.jpg"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-chart-1 hover:underline"
                             >
-                                nngroup.com/articles/design-thinking
+                                cet.tu-dortmund.de
                             </a>
-                            )
+                            ) • <strong>Prozessmodell:</strong> HPI d.school
                         </p>
                     </div>
                 </motion.div>
