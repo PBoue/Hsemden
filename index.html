@@ -1,15 +1,67 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
     <head>
         <meta charset="UTF-8" />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        <title>Job Interview Presentation Design</title>
+        <title>DigiChildProtect – Forschungspräsentation</title>
+        <meta
+            name="description"
+            content="Forschungsdesign-Präsentation für das DigiChildProtect-Projekt an der Hochschule Emden/Leer."
+        />
     </head>
 
     <body>
+        <!-- Hidden form for Netlify Forms detection during build -->
+        <form
+            name="contact"
+            netlify
+            netlify-honeypot="bot-field"
+            hidden
+        >
+            <input
+                type="text"
+                name="bot-field"
+            />
+            <input
+                type="text"
+                name="name"
+            />
+            <input
+                type="email"
+                name="email"
+            />
+            <input
+                type="text"
+                name="subject"
+            />
+            <textarea name="message"></textarea>
+        </form>
+
+        <noscript>
+            <div
+                style="
+                    padding: 2rem;
+                    text-align: center;
+                    font-family: system-ui, sans-serif;
+                "
+            >
+                <h1>JavaScript erforderlich</h1>
+                <p>
+                    Diese Präsentation benötigt JavaScript. Bitte aktivieren Sie
+                    JavaScript in Ihrem Browser.
+                </p>
+                <p style="margin-top: 1rem; color: #666">
+                    <em
+                        >This presentation requires JavaScript. Please enable
+                        JavaScript in your browser.</em
+                    >
+                </p>
+            </div>
+        </noscript>
+
         <div id="root"><!--app-html--></div>
         <script
             type="module"

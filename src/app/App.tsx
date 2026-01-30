@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { ThemeProvider } from '@/app/components/theme-provider';
 import { LanguageProvider } from '@/app/context/LanguageContext';
+import { AuthProvider, useAuth } from '@/app/context/AuthContext';
 import { AuthCover } from '@/app/components/AuthCover';
 import { SlideNavigationBar } from '@/app/components/SlideNavigationBar';
 import { SettingsDrawer } from '@/app/components/SettingsDrawer';
@@ -311,10 +312,9 @@ function PresentationContent({
     onSlideChange: (index: SlideIndex) => void;
     onNavigateToMeta: (mode: ViewMode, fromSlide: SlideIndex) => void;
 }) {
-    const requireAuth = import.meta.env.VITE_REQUIRE_AUTH !== 'false';
+    const { isAuthenticated, requireAuth, login, logout } = useAuth();
 
     const [currentSlide, setCurrentSlide] = useState(routeSlideIndex);
-    const [isAuthenticated, setIsAuthenticated] = useState(!requireAuth);
     const [isTocOpen, setIsTocOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [expandedSlide, setExpandedSlide] = useState<string | null>(null);
@@ -396,7 +396,7 @@ function PresentationContent({
     const CurrentSlideComponent = slides[currentSlide].component;
 
     if (requireAuth && !isAuthenticated) {
-        return <AuthCover onAuthenticate={() => setIsAuthenticated(true)} />;
+        return <AuthCover onAuthenticate={login} />;
     }
 
     return (
@@ -405,7 +405,7 @@ function PresentationContent({
                 isOpen={isSettingsOpen}
                 onClose={() => setIsSettingsOpen(false)}
                 isAuthenticated={isAuthenticated}
-                onLogout={() => setIsAuthenticated(false)}
+                onLogout={logout}
                 onNavigateToMeta={handleViewModeChange}
                 currentView={viewMode}
             />
@@ -466,7 +466,9 @@ export default function App() {
     return (
         <ThemeProvider defaultTheme="light">
             <LanguageProvider>
-                <AppRoutes />
+                <AuthProvider>
+                    <AppRoutes />
+                </AuthProvider>
             </LanguageProvider>
         </ThemeProvider>
     );

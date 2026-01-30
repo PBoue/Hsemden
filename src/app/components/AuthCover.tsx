@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
+import { useLanguage } from '@/app/context/LanguageContext';
 
 interface AuthCoverProps {
     onAuthenticate: () => void;
 }
 
 export function AuthCover({ onAuthenticate }: AuthCoverProps) {
+    const { t } = useLanguage();
     const [showPassword, setShowPassword] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -27,7 +29,7 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
         const ok =
             username === expectedUsername && password === expectedPassword;
         if (!ok) {
-            setError('Falscher Benutzername oder Passwort.');
+            setError(t('auth.error'));
             return;
         }
 
@@ -48,18 +50,18 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                     <div className="space-y-4">
                         <div className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded">
                             <span className="text-sm font-medium tracking-wide">
-                                DigiChildProtect
+                                {t('authCover.badge')}
                             </span>
                         </div>
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[0.95]">
-                            Forschungs
+                            {t('authCover.title1')}
                             <br />
-                            präsentation
+                            {t('authCover.title2')}
                         </h1>
                         <p className="text-xl text-muted-foreground max-w-lg">
-                            Hochschule Emden/Leer • SAG 128
+                            {t('authCover.subtitle')}
                             <br />
-                            Interview: 30. Januar 2026
+                            {t('authCover.date')}
                         </p>
                     </div>
 
@@ -82,10 +84,10 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                             </div>
                             <div>
                                 <p className="font-medium text-foreground">
-                                    10 Slides
+                                    {t('authCover.feature1Title')}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Vollständige Forschungsdesign-Präsentation
+                                    {t('authCover.feature1Desc')}
                                 </p>
                             </div>
                         </div>
@@ -108,10 +110,10 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                             </div>
                             <div>
                                 <p className="font-medium text-foreground">
-                                    Geschützt
+                                    {t('authCover.feature2Title')}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Nur für Interview-Teilnehmer
+                                    {t('authCover.feature2Desc')}
                                 </p>
                             </div>
                         </div>
@@ -128,10 +130,10 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                     <div className="bg-card border border-border rounded-lg p-8 shadow-lg">
                         <div className="mb-8 text-center">
                             <h2 className="text-2xl font-bold text-foreground">
-                                Login
+                                {t('auth.title')}
                             </h2>
                             <p className="text-sm text-muted-foreground mt-2">
-                                Bitte Zugangsdaten eingeben
+                                {t('auth.subtitle')}
                             </p>
                         </div>
 
@@ -145,7 +147,7 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                                     htmlFor="username"
                                     className="text-sm font-medium text-foreground"
                                 >
-                                    Benutzername
+                                    {t('auth.username')}
                                 </label>
                                 <div className="relative">
                                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -170,7 +172,7 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                                     htmlFor="password"
                                     className="text-sm font-medium text-foreground"
                                 >
-                                    Passwort
+                                    {t('auth.password')}
                                 </label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -197,8 +199,8 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                                         aria-label={
                                             showPassword
-                                                ? 'Hide password'
-                                                : 'Show password'
+                                                ? t('auth.hidePassword')
+                                                : t('auth.showPassword')
                                         }
                                     >
                                         {showPassword ? (
@@ -220,19 +222,17 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                                 type="submit"
                                 className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
                             >
-                                Entsperren
+                                {t('auth.submit')}
                             </button>
                         </form>
 
                         <div className="mt-6 text-xs text-muted-foreground text-center">
-                            Hinweis: Das ist ein einfacher Client-Schutz (wie
-                            ein "Türsteher") und ersetzt keine echte
-                            Server-Auth.
+                            {t('auth.hint')}
                         </div>
                     </div>
 
                     <p className="text-center text-sm text-muted-foreground mt-6">
-                        Protected content • Interview access only
+                        {t('auth.protected')}
                     </p>
                 </motion.div>
             </div>

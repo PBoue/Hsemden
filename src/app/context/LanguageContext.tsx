@@ -1,78 +1,72 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    useCallback,
+    ReactNode,
+} from 'react';
+import { de, en, type TranslationKey } from '@/i18n';
 
-type Language = 'de' | 'en';
+export type Language = 'de' | 'en';
 
 interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+    language: Language;
+    setLanguage: (lang: Language) => void;
+    t: (key: TranslationKey) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+    undefined,
+);
 
-const translations = {
-  de: {
-    // Navigation
-    'nav.home': 'Startseite',
-    'nav.slide': 'Folie',
-    'nav.of': 'von',
-    'nav.previous': 'Vorherige Folie',
-    'nav.next': 'Nächste Folie',
-    'nav.first': 'Zur ersten Folie',
-    
-    // Slide titles
-    'slide.title': 'Titel',
-    'slide.problem': 'Problemstellung',
-    'slide.questions': 'Forschungsfragen',
-    'slide.methodology': 'Methodik',
-    'slide.stakeholders': 'Stakeholder',
-    'slide.workpackages': 'Arbeitspakete',
-    'slide.dataprotection': 'Datenschutz & Ethik',
-    'slide.interdisciplinary': 'Interdisziplinäre Umsetzung',
-    'slide.timeline': 'Phasenmodell',
-    'slide.closing': 'Zusammenfassung',
-  },
-  en: {
-    // Navigation
-    'nav.home': 'Home',
-    'nav.slide': 'Slide',
-    'nav.of': 'of',
-    'nav.previous': 'Previous slide',
-    'nav.next': 'Next slide',
-    'nav.first': 'Go to first slide',
-    
-    // Slide titles
-    'slide.title': 'Title',
-    'slide.problem': 'Problem Statement',
-    'slide.questions': 'Research Questions',
-    'slide.methodology': 'Methodology',
-    'slide.stakeholders': 'Stakeholders',
-    'slide.workpackages': 'Work Packages',
-    'slide.dataprotection': 'Data Protection & Ethics',
-    'slide.interdisciplinary': 'Interdisciplinary Implementation',
-    'slide.timeline': 'Timeline',
-    'slide.closing': 'Summary',
-  },
-};
+const translations = { de, en } as const;
+
+const LANGUAGE_STORAGE_KEY = 'presentation_language';
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('de');
+    const [language, setLanguageState] = useState<Language>(() => {
+        if (typeof window !== 'undefined') {
+            const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+            if (stored === 'de' || stored === 'en') return stored;
+            // Check browser preference
+            const browserLang = navigator.language.toLowerCase();
+            if (browserLang.startsWith('de')) return 'de';
+        }
+        return 'de'; // Default to German
+    });
 
-  const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations['de']] || key;
-  };
+    // Persist language preference
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+            // Update html lang attribute
+            document.documentElement.lang = language;
+        }
+    }, [language]);
 
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
+    const setLanguage = useCallback((lang: Language) => {
+        setLanguageState(lang);
+    }, []);
+
+    const t = useCallback(
+        (key: TranslationKey): string => {
+            return translations[language][key] || key;
+        },
+        [language],
+    );
+
+    return (
+        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+            {children}
+        </LanguageContext.Provider>
+    );
 }
 
 export function useLanguage() {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
+    const context = useContext(LanguageContext);
+    if (!context) {
+        throw new Error('useLanguage must be used within a LanguageProvider');
+    }
+    return context;
 }
