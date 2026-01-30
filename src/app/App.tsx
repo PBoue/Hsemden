@@ -121,6 +121,8 @@ function AppRoutes() {
     const navigateToSlide = (index: SlideIndex) => {
         const clamped = parseSlideIndex(String(index), slides.length);
         navigate(`/slides/${clamped}`);
+        // Scroll to top on slide change
+        window.scrollTo({ top: 0, behavior: 'instant' });
     };
 
     const navigateToMeta = (mode: ViewMode, fromSlide: SlideIndex) => {
