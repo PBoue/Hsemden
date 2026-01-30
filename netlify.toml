@@ -6,6 +6,12 @@
   NODE_VERSION = "20"
   PNPM_VERSION = "9.15.0"
 
+# Redirect root to navigation page for no-JS users
+[[redirects]]
+  from = "/"
+  to = "/navigation/"
+  status = 302
+
 # SPA fallback for client-side routing.
 # Pre-rendered pages (e.g. /slides/3/index.html) will still be served when they exist.
 [[redirects]]
