@@ -283,16 +283,19 @@ export function NetworkVisualization() {
   };
 
   const getConnectionOpacity = (connection: Connection) => {
-    if (!hoveredNode && !selectedNode) return 0.15;
+    if (!hoveredNode && !selectedNode) {
+      // Default visibility based on strength
+      return connection.strength === 'strong' ? 0.5 : connection.strength === 'medium' ? 0.35 : 0.25;
+    }
     const activeNode = selectedNode || hoveredNode;
     if (connection.from === activeNode || connection.to === activeNode) {
-      return connection.strength === 'strong' ? 0.6 : connection.strength === 'medium' ? 0.4 : 0.25;
+      return connection.strength === 'strong' ? 0.9 : connection.strength === 'medium' ? 0.7 : 0.5;
     }
-    return 0.05;
+    return 0.1;
   };
 
   const getConnectionStyle = (relationshipType: RelationshipType, strength: string) => {
-    const width = strength === 'strong' ? 0.4 : strength === 'medium' ? 0.25 : 0.15;
+    const width = strength === 'strong' ? 0.6 : strength === 'medium' ? 0.4 : 0.25;
     
     switch (relationshipType) {
       case 'direkt':
@@ -348,12 +351,11 @@ export function NetworkVisualization() {
               x2={toNode.x}
               y2={toNode.y}
               stroke="hsl(var(--foreground))"
-              strokeOpacity={opacity}
               strokeDasharray={style.strokeDasharray}
               strokeWidth={style.strokeWidth}
-              initial={{ opacity: 0 }}
+              initial={{ strokeOpacity: 0 }}
               animate={{ 
-                opacity: opacity
+                strokeOpacity: opacity
               }}
               transition={{ duration: 0.8, delay: idx * 0.02, ease: "easeOut" }}
             />
