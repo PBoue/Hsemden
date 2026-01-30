@@ -78,11 +78,14 @@ export function SettingsDrawer({
         { label: t('settings.fontXLarge'), value: '20px' },
     ];
 
-    const [currentFontSize, setCurrentFontSize] = useState(() => {
+    const [currentFontSize, setCurrentFontSize] = useState('16px');
+
+    // Sync font size from localStorage on mount (client-side only)
+    useEffect(() => {
         const stored = localStorage.getItem('fontSize') || '16px';
         document.documentElement.style.fontSize = stored;
-        return stored;
-    });
+        setCurrentFontSize(stored);
+    }, []);
 
     const handleFontSizeChange = (size: string) => {
         document.documentElement.style.fontSize = size;
