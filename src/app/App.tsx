@@ -77,7 +77,7 @@ const slides = [
     {
         component: InterdisciplinarySlide,
         title: 'Interdisziplinär',
-        subtitle: 'Holocracy-Struktur',
+        subtitle: 'Agile Projektorganisation',
         color: 'bg-chart-2',
     },
     {
@@ -400,20 +400,19 @@ function PresentationContent({
 
     const CurrentSlideComponent = slides[currentSlide].component;
 
-    // TODO: Re-enable authentication after review
     // Show loading state while checking authentication
-    // if (isLoading) {
-    //     return (
-    //         <div className="h-screen w-screen bg-background flex items-center justify-center">
-    //             <div className="text-muted-foreground">Loading...</div>
-    //         </div>
-    //     );
-    // }
+    if (isLoading) {
+        return (
+            <div className="h-screen w-screen bg-background flex items-center justify-center">
+                <div className="text-muted-foreground">Loading...</div>
+            </div>
+        );
+    }
 
     // Show login screen if not authenticated
-    // if (!isAuthenticated) {
-    //     return <AuthCover onAuthenticate={login} />;
-    // }
+    if (!isAuthenticated) {
+        return <AuthCover onAuthenticate={login} />;
+    }
 
     return (
         <div className="h-screen w-screen bg-background flex flex-col overflow-hidden">

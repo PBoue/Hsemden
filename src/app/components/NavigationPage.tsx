@@ -12,7 +12,7 @@ const slideInfo = [
     { title: 'Stakeholder', subtitle: 'Kern- und Systemkontext' },
     { title: 'Arbeitspakete', subtitle: '11 Pakete zur Umsetzung' },
     { title: 'Datenschutz & Ethik', subtitle: '5-Stufenmodell' },
-    { title: 'Interdisziplinär', subtitle: 'Holocracy-Struktur' },
+    { title: 'Interdisziplinär', subtitle: 'Agile Projektorganisation' },
     { title: 'Phasenmodell', subtitle: '42 Monate Design-Thinking' },
     { title: 'Zusammenfassung', subtitle: 'Kernmerkmale & Beiträge' },
     { title: 'Vielen Dank', subtitle: 'Für Ihre Aufmerksamkeit' },
