@@ -253,139 +253,115 @@ export function MethodologySlide() {
                         3. Iterativer Design-Thinking-Prozess
                     </h2>
 
-                    {/* Linear Process Visualization inspired by NN/g - COMPLETELY REBUILT */}
+                    {/* Linear Process Visualization inspired by NN/g */}
                     <div className="relative w-full">
-                        {/* Main container with fixed aspect ratio */}
+                        {/* Main container */}
                         <div
                             className="relative mx-auto"
                             style={{ maxWidth: '1200px' }}
                         >
-                            {/* Feedback Arrows Container - positioned above circles */}
+                            {/* Feedback Arrows - using absolute positioned SVG */}
                             <div
-                                className="relative w-full mb-4"
-                                style={{ height: '120px' }}
+                                className="relative w-full"
+                                style={{ height: '80px' }}
                             >
                                 <svg
-                                    className="absolute inset-0 w-full h-full overflow-visible"
-                                    viewBox="0 0 100 100"
-                                    preserveAspectRatio="none"
+                                    className="absolute inset-0 w-full h-full"
+                                    viewBox="0 0 600 80"
+                                    preserveAspectRatio="xMidYMid meet"
                                 >
                                     <defs>
                                         <marker
-                                            id="arrow-feedback"
-                                            markerWidth="8"
-                                            markerHeight="8"
-                                            refX="6"
-                                            refY="4"
+                                            id="arrowhead"
+                                            markerWidth="10"
+                                            markerHeight="7"
+                                            refX="9"
+                                            refY="3.5"
                                             orient="auto"
                                         >
                                             <polygon
-                                                points="0 0, 8 4, 0 8"
-                                                fill="#666"
+                                                points="0 0, 10 3.5, 0 7"
+                                                fill="#888"
                                             />
                                         </marker>
                                     </defs>
 
+                                    {/* Phase positions: 50, 150, 250, 350, 450, 550 */}
+
                                     {/* Short arcs - between adjacent phases */}
-                                    {/* Observe → Understand */}
                                     <path
-                                        d="M 25 90 Q 16.67 50, 8.33 90"
+                                        d="M 150 75 Q 100 45, 50 75"
                                         fill="none"
-                                        stroke="#666"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.7"
+                                        stroke="#777"
+                                        strokeWidth="2"
+                                        markerEnd="url(#arrowhead)"
                                     />
-
-                                    {/* Define → Observe */}
                                     <path
-                                        d="M 41.67 90 Q 33.33 50, 25 90"
+                                        d="M 250 75 Q 200 45, 150 75"
                                         fill="none"
-                                        stroke="#666"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.7"
+                                        stroke="#777"
+                                        strokeWidth="2"
+                                        markerEnd="url(#arrowhead)"
                                     />
-
-                                    {/* Find Ideas → Define */}
                                     <path
-                                        d="M 58.33 90 Q 50 50, 41.67 90"
+                                        d="M 350 75 Q 300 45, 250 75"
                                         fill="none"
-                                        stroke="#666"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.7"
+                                        stroke="#777"
+                                        strokeWidth="2"
+                                        markerEnd="url(#arrowhead)"
                                     />
-
-                                    {/* Develop → Find Ideas */}
                                     <path
-                                        d="M 75 90 Q 66.67 50, 58.33 90"
+                                        d="M 450 75 Q 400 45, 350 75"
                                         fill="none"
-                                        stroke="#666"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.7"
+                                        stroke="#777"
+                                        strokeWidth="2"
+                                        markerEnd="url(#arrowhead)"
                                     />
-
-                                    {/* Testing → Develop */}
                                     <path
-                                        d="M 91.67 90 Q 83.33 50, 75 90"
+                                        d="M 550 75 Q 500 45, 450 75"
                                         fill="none"
-                                        stroke="#666"
-                                        strokeWidth="1.5"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.7"
+                                        stroke="#777"
+                                        strokeWidth="2"
+                                        markerEnd="url(#arrowhead)"
                                     />
 
                                     {/* Medium arcs - 2 phases back */}
-                                    {/* Define → Understand */}
                                     <path
-                                        d="M 41.67 85 Q 25 25, 8.33 85"
-                                        fill="none"
-                                        stroke="#888"
-                                        strokeWidth="1.2"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.55"
-                                    />
-
-                                    {/* Find Ideas → Observe */}
-                                    <path
-                                        d="M 58.33 85 Q 41.67 25, 25 85"
-                                        fill="none"
-                                        stroke="#888"
-                                        strokeWidth="1.2"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.55"
-                                    />
-
-                                    {/* Develop → Define */}
-                                    <path
-                                        d="M 75 85 Q 58.33 25, 41.67 85"
-                                        fill="none"
-                                        stroke="#888"
-                                        strokeWidth="1.2"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.55"
-                                    />
-
-                                    {/* Testing → Find Ideas */}
-                                    <path
-                                        d="M 91.67 85 Q 75 25, 58.33 85"
-                                        fill="none"
-                                        stroke="#888"
-                                        strokeWidth="1.2"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.55"
-                                    />
-
-                                    {/* Large arc - Testing → Define (fundamental rework) */}
-                                    <path
-                                        d="M 91.67 80 Q 66.67 5, 41.67 80"
+                                        d="M 250 70 Q 150 20, 50 70"
                                         fill="none"
                                         stroke="#999"
-                                        strokeWidth="1"
-                                        markerEnd="url(#arrow-feedback)"
-                                        opacity="0.45"
+                                        strokeWidth="1.5"
+                                        markerEnd="url(#arrowhead)"
+                                    />
+                                    <path
+                                        d="M 350 70 Q 250 20, 150 70"
+                                        fill="none"
+                                        stroke="#999"
+                                        strokeWidth="1.5"
+                                        markerEnd="url(#arrowhead)"
+                                    />
+                                    <path
+                                        d="M 450 70 Q 350 20, 250 70"
+                                        fill="none"
+                                        stroke="#999"
+                                        strokeWidth="1.5"
+                                        markerEnd="url(#arrowhead)"
+                                    />
+                                    <path
+                                        d="M 550 70 Q 450 20, 350 70"
+                                        fill="none"
+                                        stroke="#999"
+                                        strokeWidth="1.5"
+                                        markerEnd="url(#arrowhead)"
+                                    />
+
+                                    {/* Large arc - Testing → Define */}
+                                    <path
+                                        d="M 550 65 Q 400 5, 250 65"
+                                        fill="none"
+                                        stroke="#aaa"
+                                        strokeWidth="1.2"
+                                        markerEnd="url(#arrowhead)"
                                     />
                                 </svg>
                             </div>
