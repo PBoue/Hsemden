@@ -1,9 +1,23 @@
 import { motion } from "motion/react";
+import backgroundImg from "figma:asset/cdc1065f99d95f00f8129bda6499a0f166a8555f.png";
 
 export function TitleSlide() {
   return (
-    <div className="min-h-full w-full flex items-center justify-center p-8 md:p-16 bg-background">
-      <div className="w-full max-w-7xl">
+    <div className="min-h-full w-full flex items-center justify-center p-8 md:p-16 bg-background relative overflow-hidden">
+      {/* Subtle background image element - positioned to break up grid */}
+      <div className="absolute left-0 top-0 w-2/3 lg:w-1/2 h-full pointer-events-none overflow-hidden">
+        <img
+          src={backgroundImg}
+          alt=""
+          className="w-full h-full object-cover opacity-[0.30]"
+          style={{
+            maskImage: 'linear-gradient(to right, black 40%, transparent 95%)',
+            WebkitMaskImage: 'linear-gradient(to right, black 40%, transparent 95%)',
+          }}
+        />
+      </div>
+      
+      <div className="w-full max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Title Area */}
           <motion.div
@@ -21,7 +35,7 @@ export function TitleSlide() {
               </h1>
             </div>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed">
+            <p className="text-xl md:text-2xl text-foreground max-w-2xl leading-relaxed">
               Explorative Ausgangslage, menschzentrierte Entwicklung und
               stufenweise Feldvalidierung
             </p>
@@ -41,7 +55,7 @@ export function TitleSlide() {
               </div>
             </div>
 
-            <div className="bg-card border-2 border-border p-6 rounded-lg">
+            <div className="bg-card border border-border p-6 rounded-lg">
               <div className="space-y-2">
                 <div className="text-sm font-medium tracking-wide text-muted-foreground">TERMIN</div>
                 <div className="text-lg font-medium text-foreground">30. Januar 2026</div>
@@ -49,7 +63,7 @@ export function TitleSlide() {
               </div>
             </div>
 
-            <div className="bg-card border-2 border-border p-6 rounded-lg">
+            <div className="bg-card border border-border p-6 rounded-lg">
               <div className="space-y-2">
                 <div className="text-sm font-medium tracking-wide text-muted-foreground">PROJEKT</div>
                 <div className="text-lg font-medium text-foreground">SAG 128</div>

@@ -1,8 +1,15 @@
-import { Shield, Lock, Eye } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { InPageNavigation, NavigationSection } from '@/app/components/InPageNavigation';
 
 export function DataProtectionSlide() {
+  const navigationSections: NavigationSection[] = [
+    { id: 'section-1', label: '1. Rechtliche Grundlagen' },
+    { id: 'section-2', label: '2. Technische Maßnahmen' },
+    { id: 'section-3', label: '3. 5-Stufenmodell' },
+    { id: 'section-4', label: '4. Gate-Kriterien' },
+  ];
+
   const stages = [
     {
       stage: 0,
@@ -42,8 +49,17 @@ export function DataProtectionSlide() {
   ];
 
   return (
-    <div className="min-h-full p-8 md:p-16 bg-background">
-      <div className="max-w-7xl mx-auto space-y-12">
+    <div className="min-h-full p-8 md:p-16 bg-background relative overflow-hidden">
+      {/* In-Page Navigation */}
+      <InPageNavigation sections={navigationSections} />
+      
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 0)',
+        backgroundSize: '40px 40px'
+      }} />
+      
+      <div className="max-w-7xl mx-auto space-y-12 relative">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -52,90 +68,89 @@ export function DataProtectionSlide() {
           className="space-y-3"
         >
           <div className="inline-block px-4 py-2 bg-muted rounded">
-            <span className="text-sm font-medium tracking-wide text-muted-foreground">06 — SCHUTZ</span>
+            <span className="text-sm font-medium tracking-wide text-muted-foreground">07 — SCHUTZ</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
             Datenschutz & Ethik
           </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl">
+            Risikoadaptiertes Stufenmodell für verantwortungsvolle Forschung
+          </p>
         </motion.div>
 
-        {/* Legal & Technical */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="h-full bg-chart-1 text-white p-8 rounded-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <Shield className="h-8 w-8" aria-hidden="true" />
-                <div>
-                  <div className="text-sm font-medium tracking-wide opacity-90">RECHTLICH</div>
-                  <h2 className="text-2xl font-bold">Grundlagen</h2>
-                </div>
-              </div>
-              <ul className="space-y-3 text-sm" role="list">
-                <li className="leading-relaxed">
-                  <strong>DSGVO Art. 89:</strong> Garantien für Forschung (Datenminimierung, technische/organisatorische Maßnahmen)
-                </li>
-                <li className="leading-relaxed">
-                  <strong>§ 13 NDSG:</strong> Zusätzlicher Rahmen für Niedersachsen
-                </li>
-                <li className="leading-relaxed">
-                  <strong>DFG-Kodex & HS-GWP:</strong> Gute wissenschaftliche Praxis
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="h-full bg-card border-2 border-border p-8 rounded-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <Lock className="h-8 w-8 text-chart-2" aria-hidden="true" />
-                <div>
-                  <div className="text-sm font-medium tracking-wide text-muted-foreground">TECHNISCH</div>
-                  <h2 className="text-2xl font-bold text-foreground">Maßnahmen</h2>
-                </div>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground" role="list">
-                <li className="flex items-start gap-2">
-                  <span className="text-chart-2 mt-1 font-bold">•</span>
-                  <span>Datenminimierung ab erstem Kontakt</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chart-2 mt-1 font-bold">•</span>
-                  <span>Trennung identifizierender Merkmale</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chart-2 mt-1 font-bold">•</span>
-                  <span>Frühestmögliche Anonymisierung</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chart-2 mt-1 font-bold">•</span>
-                  <span>Restriktive Zugriffs- und Rollenkonzepte</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-chart-2 mt-1 font-bold">•</span>
-                  <span>Logging, Monitoring, Incident-Management</span>
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Stage Model */}
+        {/* Legal Foundations */}
         <motion.div
+          id="section-1"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="space-y-6"
         >
           <h2 className="text-2xl font-bold text-foreground">
-            5-Stufenmodell: Beteiligung Betroffener und Kinder
+            1. Rechtliche Grundlagen
+          </h2>
+          <div className="bg-chart-1 text-white p-8 rounded-lg">
+            <ul className="space-y-3 text-sm" role="list">
+              <li className="leading-relaxed">
+                <strong>DSGVO Art. 89:</strong> Garantien für Forschung (Datenminimierung, technische/organisatorische Maßnahmen)
+              </li>
+              <li className="leading-relaxed">
+                <strong>§ 13 NDSG:</strong> Zusätzlicher Rahmen für Niedersachsen
+              </li>
+              <li className="leading-relaxed">
+                <strong>DFG-Kodex & HS-GWP:</strong> Gute wissenschaftliche Praxis
+              </li>
+            </ul>
+          </div>
+        </motion.div>
+
+        {/* Technical Measures */}
+        <motion.div
+          id="section-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="space-y-6"
+        >
+          <h2 className="text-2xl font-bold text-foreground">
+            2. Technische Maßnahmen
+          </h2>
+          <div className="bg-card border border-border p-8 rounded-lg">
+            <ul className="space-y-2 text-sm text-muted-foreground" role="list">
+              <li className="flex items-start gap-2">
+                <span className="text-chart-2 mt-1 font-bold">•</span>
+                <span>Datenminimierung ab erstem Kontakt</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-chart-2 mt-1 font-bold">•</span>
+                <span>Trennung identifizierender Merkmale</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-chart-2 mt-1 font-bold">•</span>
+                <span>Frühestmögliche Anonymisierung</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-chart-2 mt-1 font-bold">•</span>
+                <span>Restriktive Zugriffs- und Rollenkonzepte</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-chart-2 mt-1 font-bold">•</span>
+                <span>Logging, Monitoring, Incident-Management</span>
+              </li>
+            </ul>
+          </div>
+        </motion.div>
+
+        {/* Stage Model */}
+        <motion.div
+          id="section-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="space-y-6"
+        >
+          <h2 className="text-2xl font-bold text-foreground">
+            3. 5-Stufenmodell: Beteiligung Betroffener und Kinder
           </h2>
 
           <div className="space-y-3" role="list">
@@ -170,21 +185,18 @@ export function DataProtectionSlide() {
 
         {/* Gate Criteria */}
         <motion.div
+          id="section-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="bg-muted p-8 rounded-lg"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="space-y-6"
         >
-          <div className="flex items-start gap-4">
-            <Eye className="h-8 w-8 text-foreground flex-shrink-0 mt-1" aria-hidden="true" />
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold text-foreground">Gate-Kriterien für Stufenübergänge</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Datenschutz-Compliance • Sicherheitsbewertung • Akzeptanznachweise •
-                Dokumentiertes Fehlermanagement — Nur nach Erfüllung erfolgt Freigabe
-              </p>
-            </div>
-          </div>
+          <h2 className="text-2xl font-bold text-foreground">
+            4. Gate-Kriterien für Stufenübergänge
+          </h2>
+          <p className="text-foreground leading-relaxed">
+            Datenschutz-Compliance • Sicherheitsbewertung • Akzeptanznachweise • Dokumentiertes Fehlermanagement — Nur nach Erfüllung erfolgt Freigabe
+          </p>
         </motion.div>
       </div>
     </div>

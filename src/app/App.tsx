@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Home } from 'lucide-react';
 import { ThemeProvider } from '@/app/components/theme-provider';
-import { ThemeToggle } from '@/app/components/theme-toggle';
+import { LanguageProvider } from '@/app/context/LanguageContext';
+import { AuthCover } from '@/app/components/AuthCover';
+import { SlideNavigationBar } from '@/app/components/SlideNavigationBar';
+import { SettingsDrawer } from '@/app/components/SettingsDrawer';
+import { TableOfContentsDrawer } from '@/app/components/TableOfContentsDrawer';
+import { slidesConfig } from '@/config/slides-config';
 import { TitleSlide } from '@/app/components/TitleSlide';
 import { ProblemContextSlide } from '@/app/components/ProblemContextSlide';
 import { ResearchQuestionsSlide } from '@/app/components/ResearchQuestionsSlide';
@@ -12,23 +16,90 @@ import { DataProtectionSlide } from '@/app/components/DataProtectionSlide';
 import { InterdisciplinarySlide } from '@/app/components/InterdisciplinarySlide';
 import { TimelineSlide } from '@/app/components/TimelineSlide';
 import { ClosingSlide } from '@/app/components/ClosingSlide';
+import { ThankYouSlide } from '@/app/components/ThankYouSlide';
+import { BibliographyPage } from '@/app/components/BibliographyPage';
+import { GlossaryPage } from '@/app/components/GlossaryPage';
+import { ContactPage } from '@/app/components/ContactPage';
 import { cn } from '@/lib/utils';
 
 const slides = [
-  { component: TitleSlide, title: 'Titel' },
-  { component: ProblemContextSlide, title: 'Problemstellung' },
-  { component: ResearchQuestionsSlide, title: 'Forschungsfragen' },
-  { component: MethodologySlide, title: 'Methodik' },
-  { component: StakeholdersSlide, title: 'Stakeholder' },
-  { component: WorkPackagesSlide, title: 'Arbeitspakete' },
-  { component: DataProtectionSlide, title: 'Datenschutz & Ethik' },
-  { component: InterdisciplinarySlide, title: 'Interdisziplinäre Umsetzung' },
-  { component: TimelineSlide, title: 'Phasenmodell' },
-  { component: ClosingSlide, title: 'Zusammenfassung' },
+  { 
+    component: TitleSlide, 
+    title: 'Titel', 
+    subtitle: 'DigiChildProtect Forschungsdesign',
+    color: 'bg-primary'
+  },
+  { 
+    component: ProblemContextSlide, 
+    title: 'Problemstellung', 
+    subtitle: 'Kindeswohlgefährdungen in Deutschland',
+    color: 'bg-chart-1'
+  },
+  { 
+    component: ResearchQuestionsSlide, 
+    title: 'Forschungsfragen',
+    subtitle: 'Sechs zentrale Fragen',
+    color: 'bg-chart-2'
+  },
+  { 
+    component: MethodologySlide, 
+    title: 'Methodik',
+    subtitle: 'Mixed-Methods-Design',
+    color: 'bg-chart-3'
+  },
+  { 
+    component: StakeholdersSlide, 
+    title: 'Stakeholder',
+    subtitle: 'Kern- und Systemkontext',
+    color: 'bg-chart-4'
+  },
+  { 
+    component: WorkPackagesSlide, 
+    title: 'Arbeitspakete',
+    subtitle: '11 Pakete zur Umsetzung',
+    color: 'bg-chart-5'
+  },
+  { 
+    component: DataProtectionSlide, 
+    title: 'Datenschutz & Ethik',
+    subtitle: '5-Stufenmodell',
+    color: 'bg-destructive'
+  },
+  { 
+    component: InterdisciplinarySlide, 
+    title: 'Interdisziplinär',
+    subtitle: 'Holocracy-Struktur',
+    color: 'bg-chart-2'
+  },
+  { 
+    component: TimelineSlide, 
+    title: 'Phasenmodell',
+    subtitle: '42 Monate Design-Thinking',
+    color: 'bg-chart-3'
+  },
+  { 
+    component: ClosingSlide, 
+    title: 'Zusammenfassung',
+    subtitle: 'Kernmerkmale & Beiträge',
+    color: 'bg-primary'
+  },
+  { 
+    component: ThankYouSlide, 
+    title: 'Vielen Dank',
+    subtitle: 'Für Ihre Aufmerksamkeit',
+    color: 'bg-primary'
+  },
 ];
+
+type ViewMode = 'presentation' | 'bibliography' | 'glossary' | 'contact';
 
 function PresentationContent() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isTocOpen, setIsTocOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [expandedSlide, setExpandedSlide] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('presentation');
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
@@ -46,8 +117,39 @@ function PresentationContent() {
     setCurrentSlide(index);
   };
 
+  const handleNavigation = (slideId: string, sectionId?: string) => {
+    // Find the slide index from slidesConfig
+    const slideIndex = slidesConfig.findIndex(s => s.id === slideId);
+    if (slideIndex !== -1) {
+      setCurrentSlide(slideIndex);
+      
+      // If a section is specified, scroll to it after a brief delay
+      if (sectionId) {
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            element.scrollIntoView({
+              behavior: reducedMotion ? 'auto' : 'smooth',
+              block: 'start',
+            });
+          }
+        }, 100);
+      }
+    }
+  };
+
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    setIsSettingsOpen(false);
+    setIsTocOpen(false);
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle keyboard navigation in presentation mode
+      if (viewMode !== 'presentation') return;
+      
       if (e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault();
         nextSlide();
@@ -65,96 +167,86 @@ function PresentationContent() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide]);
+  }, [currentSlide, viewMode]);
 
   const CurrentSlideComponent = slides[currentSlide].component;
 
+  if (!isAuthenticated) {
+    return <AuthCover onAuthenticate={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="h-screen w-screen bg-background flex flex-col overflow-hidden">
-      {/* Slide Content */}
+      {/* Settings Drawer */}
+      <SettingsDrawer
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        isAuthenticated={isAuthenticated}
+        onLogout={() => setIsAuthenticated(false)}
+        onNavigateToMeta={handleViewModeChange}
+        currentView={viewMode}
+      />
+      
+      {/* Table of Contents Drawer */}
+      <TableOfContentsDrawer
+        isOpen={isTocOpen}
+        onClose={() => setIsTocOpen(false)}
+        slides={slidesConfig}
+        currentSlide={slidesConfig[currentSlide]?.id || 'title'}
+        onNavigate={handleNavigation}
+        expandedSlide={expandedSlide}
+        onToggleSlide={(slideId) => setExpandedSlide(expandedSlide === slideId ? null : slideId)}
+      />
+      
+      {/* Content Area */}
       <div className="flex-1 overflow-auto">
-        <CurrentSlideComponent />
+        {viewMode === 'presentation' && <CurrentSlideComponent />}
+        {viewMode === 'bibliography' && <BibliographyPage />}
+        {viewMode === 'glossary' && <GlossaryPage />}
+        {viewMode === 'contact' && <ContactPage />}
       </div>
 
-      {/* Navigation Bar */}
-      <nav
-        className="border-t border-border bg-card"
-        role="navigation"
-        aria-label="Presentation navigation"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setCurrentSlide(0)}
-              disabled={currentSlide === 0}
-              className={cn(
-                "inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50",
-              )}
-              aria-label="Go to first slide"
-            >
-              <Home className="h-4 w-4" />
-            </button>
-            <span className="text-sm text-muted-foreground" aria-live="polite" aria-atomic="true">
-              Folie {currentSlide + 1} von {slides.length}
-            </span>
-          </div>
+      {/* Navigation Bar - only show in presentation mode */}
+      {viewMode === 'presentation' && (
+        <SlideNavigationBar
+          slides={slides}
+          currentSlide={currentSlide}
+          onSlideChange={goToSlide}
+          onNext={nextSlide}
+          onPrev={prevSlide}
+          onHome={() => setCurrentSlide(0)}
+          onTocToggle={() => {
+            setIsTocOpen(!isTocOpen);
+            setIsSettingsOpen(false);
+          }}
+          onSettingsToggle={() => {
+            setIsSettingsOpen(!isSettingsOpen);
+            setIsTocOpen(false);
+          }}
+        />
+      )}
 
-          <div className="flex-1 mx-8 max-w-2xl">
-            <div className="flex gap-1" role="tablist" aria-label="Slide progress">
-              {slides.map((slide, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  role="tab"
-                  aria-selected={index === currentSlide}
-                  aria-label={`Go to slide ${index + 1}: ${slide.title}`}
-                  className={cn(
-                    "flex-1 h-1.5 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                    index === currentSlide
-                      ? "bg-primary"
-                      : index < currentSlide
-                      ? "bg-muted-foreground/30"
-                      : "bg-muted"
-                  )}
-                  title={slide.title}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={prevSlide}
-              disabled={currentSlide === 0}
-              className={cn(
-                "inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
-              )}
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              onClick={nextSlide}
-              disabled={currentSlide === slides.length - 1}
-              className={cn(
-                "inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
-              )}
-              aria-label="Next slide"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-            <ThemeToggle />
-          </div>
+      {/* Back to Presentation Button for Meta Pages */}
+      {viewMode !== 'presentation' && (
+        <div className="fixed bottom-8 right-8 z-50">
+          <button
+            onClick={() => handleViewModeChange('presentation')}
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-lg shadow-lg hover:bg-primary/90 transition-colors font-medium"
+          >
+            ← Zurück zur Präsentation
+          </button>
         </div>
-      </nav>
+      )}
     </div>
   );
 }
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <PresentationContent />
+    <ThemeProvider defaultTheme="light">
+      <LanguageProvider>
+        <PresentationContent />
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
