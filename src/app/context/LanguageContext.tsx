@@ -25,25 +25,32 @@ const translations = { de, en } as const;
 const LANGUAGE_STORAGE_KEY = 'presentation_language';
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguageState] = useState<Language>(() => {
-        if (typeof window !== 'undefined') {
-            const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-            if (stored === 'de' || stored === 'en') return stored;
+    // Always start with 'de' for consistent SSR/client initial render
+    const [language, setLanguageState] = useState<Language>('de');
+    const [isHydrated, setIsHydrated] = useState(false);
+
+    // After hydration, read stored preference
+    useEffect(() => {
+        const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        if (stored === 'de' || stored === 'en') {
+            setLanguageState(stored);
+        } else {
             // Check browser preference
             const browserLang = navigator.language.toLowerCase();
-            if (browserLang.startsWith('de')) return 'de';
+            if (browserLang.startsWith('en')) {
+                setLanguageState('en');
+            }
         }
-        return 'de'; // Default to German
-    });
+        setIsHydrated(true);
+    }, []);
 
-    // Persist language preference
+    // Persist language preference (only after hydration to avoid loops)
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (isHydrated) {
             localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-            // Update html lang attribute
             document.documentElement.lang = language;
         }
-    }, [language]);
+    }, [language, isHydrated]);
 
     const setLanguage = useCallback((lang: Language) => {
         setLanguageState(lang);

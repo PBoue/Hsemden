@@ -21,25 +21,31 @@ const AUTH_STORAGE_KEY = 'presentation_authenticated';
 export function AuthProvider({ children }: { children: ReactNode }) {
     const requireAuth = import.meta.env.VITE_REQUIRE_AUTH !== 'false';
 
-    const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        if (!requireAuth) return true;
-        // Check sessionStorage on mount
-        if (typeof window !== 'undefined') {
-            return sessionStorage.getItem(AUTH_STORAGE_KEY) === 'true';
-        }
-        return false;
-    });
+    // Always start with false for consistent SSR/client initial render
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
 
-    // Sync to sessionStorage when auth state changes
+    // After hydration, check sessionStorage
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (!requireAuth) {
+            setIsAuthenticated(true);
+        } else {
+            const stored = sessionStorage.getItem(AUTH_STORAGE_KEY) === 'true';
+            setIsAuthenticated(stored);
+        }
+        setIsHydrated(true);
+    }, [requireAuth]);
+
+    // Sync to sessionStorage when auth state changes (only after hydration)
+    useEffect(() => {
+        if (isHydrated) {
             if (isAuthenticated && requireAuth) {
                 sessionStorage.setItem(AUTH_STORAGE_KEY, 'true');
             } else if (!isAuthenticated) {
                 sessionStorage.removeItem(AUTH_STORAGE_KEY);
             }
         }
-    }, [isAuthenticated, requireAuth]);
+    }, [isAuthenticated, requireAuth, isHydrated]);
 
     const login = useCallback(() => {
         setIsAuthenticated(true);
