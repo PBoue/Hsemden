@@ -18,7 +18,7 @@ export default defineConfig(({ isSsrBuild }) => ({
     },
     build: {
         outDir: isSsrBuild ? 'dist/server' : 'dist/client',
-        emptyOutDir: true,
+        emptyOutDir: !isSsrBuild, // only empty on client build, preserve client output during SSR build
         ssrManifest: !isSsrBuild,
     },
     ssr: {
