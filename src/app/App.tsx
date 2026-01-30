@@ -312,7 +312,7 @@ function PresentationContent({
     onSlideChange: (index: SlideIndex) => void;
     onNavigateToMeta: (mode: ViewMode, fromSlide: SlideIndex) => void;
 }) {
-    const { isAuthenticated, requireAuth, login, logout } = useAuth();
+    const { isAuthenticated, isLoading, login, logout } = useAuth();
 
     const [currentSlide, setCurrentSlide] = useState(routeSlideIndex);
     const [isTocOpen, setIsTocOpen] = useState(false);
@@ -395,7 +395,17 @@ function PresentationContent({
 
     const CurrentSlideComponent = slides[currentSlide].component;
 
-    if (requireAuth && !isAuthenticated) {
+    // Show loading state while checking authentication
+    if (isLoading) {
+        return (
+            <div className="h-screen w-screen bg-background flex items-center justify-center">
+                <div className="text-muted-foreground">Loading...</div>
+            </div>
+        );
+    }
+
+    // Show login screen if not authenticated
+    if (!isAuthenticated) {
         return <AuthCover onAuthenticate={login} />;
     }
 

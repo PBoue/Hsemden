@@ -11,6 +11,11 @@
             name="description"
             content="Forschungsdesign-Präsentation für das DigiChildProtect-Projekt an der Hochschule Emden/Leer."
         />
+        <!-- Netlify Identity Widget for authentication -->
+        <script
+            type="text/javascript"
+            src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        ></script>
     </head>
 
     <body>
@@ -67,5 +72,17 @@
             type="module"
             src="/src/entry-client.tsx"
         ></script>
+        <!-- Handle Netlify Identity redirect after email confirmation/login -->
+        <script>
+            if (window.netlifyIdentity) {
+                window.netlifyIdentity.on('init', function (user) {
+                    if (!user) {
+                        window.netlifyIdentity.on('login', function () {
+                            document.location.href = '/';
+                        });
+                    }
+                });
+            }
+        </script>
     </body>
 </html>
