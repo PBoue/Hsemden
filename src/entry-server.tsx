@@ -1,11 +1,12 @@
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router';
+import { ClerkProvider } from '@clerk/clerk-react';
 import App from './app/App';
-import { slidesConfig } from './config/slides-config';
+import { slides } from './config/slides-config';
 
 export function getPrerenderRoutes(): string[] {
     const slideRoutes = Array.from(
-        { length: slidesConfig.length },
+        { length: slides.length },
         (_, index) => `/slides/${index}`,
     );
 
@@ -21,10 +22,13 @@ export function getPrerenderRoutes(): string[] {
 }
 
 export function render(url: string) {
+    const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
     const appHtml = renderToString(
-        <StaticRouter location={url}>
-            <App />
-        </StaticRouter>,
+        <ClerkProvider publishableKey={clerkPublishableKey ?? ''}>
+            <StaticRouter location={url}>
+                <App />
+            </StaticRouter>
+        </ClerkProvider>,
     );
 
     return { appHtml };

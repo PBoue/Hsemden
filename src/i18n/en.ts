@@ -28,8 +28,7 @@ export const en: Record<TranslationKey, string> = {
     'auth.password': 'Password',
     'auth.submit': 'Unlock',
     'auth.error': 'Invalid username or password.',
-    'auth.hint':
-        'Note: This is a simple client-side gate (like a "bouncer") and does not replace real server-side authentication.',
+    'auth.hint': 'Use your Clerk username and password to continue.',
     'auth.protected': 'Protected content • Interview access only',
     'auth.showPassword': 'Show password',
     'auth.hidePassword': 'Hide password',
@@ -71,6 +70,19 @@ export const en: Record<TranslationKey, string> = {
     'slide.timeline': 'Timeline',
     'slide.closing': 'Summary',
     'slide.thankyou': 'Thank You',
+
+    // Slide subtitles
+    'slideSubtitle.title': 'DigiChildProtect research design',
+    'slideSubtitle.problem': 'Child endangerment in Germany',
+    'slideSubtitle.questions': 'Six central questions',
+    'slideSubtitle.methodology': 'Mixed-methods design',
+    'slideSubtitle.stakeholders': 'Core and system context',
+    'slideSubtitle.workpackages': '11 packages for implementation',
+    'slideSubtitle.dataprotection': '5-step model',
+    'slideSubtitle.interdisciplinary': 'Agile project organization',
+    'slideSubtitle.timeline': '42 months design thinking',
+    'slideSubtitle.closing': 'Core features & contributions',
+    'slideSubtitle.thankyou': 'For your attention',
 
     // Contact page
     'contact.title': 'Contact',

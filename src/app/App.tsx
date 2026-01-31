@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import {
     Navigate,
     Route,
@@ -7,98 +7,19 @@ import {
     useNavigate,
     useParams,
 } from 'react-router-dom';
+import { useClerk, useUser } from '@clerk/clerk-react';
+import { MotionConfig } from 'motion/react';
 import { ThemeProvider } from '@/app/components/theme-provider';
-import { LanguageProvider } from '@/app/context/LanguageContext';
-import { AuthProvider, useAuth } from '@/app/context/AuthContext';
+import { LanguageProvider, useLanguage } from '@/app/context/LanguageContext';
 import { AuthCover } from '@/app/components/AuthCover';
 import { SlideNavigationBar } from '@/app/components/SlideNavigationBar';
 import { SettingsDrawer } from '@/app/components/SettingsDrawer';
 import { TableOfContentsDrawer } from '@/app/components/TableOfContentsDrawer';
-import { slidesConfig } from '@/config/slides-config';
-import { TitleSlide } from '@/app/components/TitleSlide';
-import { ProblemContextSlide } from '@/app/components/ProblemContextSlide';
-import { ResearchQuestionsSlide } from '@/app/components/ResearchQuestionsSlide';
-import { MethodologySlide } from '@/app/components/MethodologySlide';
-import { WorkPackagesSlide } from '@/app/components/WorkPackagesSlide';
-import { StakeholdersSlide } from '@/app/components/StakeholdersSlide';
-import { DataProtectionSlide } from '@/app/components/DataProtectionSlide';
-import { InterdisciplinarySlide } from '@/app/components/InterdisciplinarySlide';
-import { TimelineSlide } from '@/app/components/TimelineSlide';
-import { ClosingSlide } from '@/app/components/ClosingSlide';
-import { ThankYouSlide } from '@/app/components/ThankYouSlide';
+import { slides, slidesConfig } from '@/config/slides-config';
 import { BibliographyPage } from '@/app/components/BibliographyPage';
 import { GlossaryPage } from '@/app/components/GlossaryPage';
 import { ContactPage } from '@/app/components/ContactPage';
 import { NavigationPage } from '@/app/components/NavigationPage';
-
-const slides = [
-    {
-        component: TitleSlide,
-        title: 'Titel',
-        subtitle: 'DigiChildProtect Forschungsdesign',
-        color: 'bg-primary',
-    },
-    {
-        component: ProblemContextSlide,
-        title: 'Problemstellung',
-        subtitle: 'Kindeswohlgefährdungen in Deutschland',
-        color: 'bg-chart-1',
-    },
-    {
-        component: ResearchQuestionsSlide,
-        title: 'Forschungsfragen',
-        subtitle: 'Sechs zentrale Fragen',
-        color: 'bg-chart-2',
-    },
-    {
-        component: MethodologySlide,
-        title: 'Methodik',
-        subtitle: 'Mixed-Methods-Design',
-        color: 'bg-chart-3',
-    },
-    {
-        component: StakeholdersSlide,
-        title: 'Stakeholder',
-        subtitle: 'Kern- und Systemkontext',
-        color: 'bg-chart-4',
-    },
-    {
-        component: WorkPackagesSlide,
-        title: 'Arbeitspakete',
-        subtitle: '11 Pakete zur Umsetzung',
-        color: 'bg-chart-5',
-    },
-    {
-        component: DataProtectionSlide,
-        title: 'Datenschutz & Ethik',
-        subtitle: '5-Stufenmodell',
-        color: 'bg-destructive',
-    },
-    {
-        component: InterdisciplinarySlide,
-        title: 'Interdisziplinär',
-        subtitle: 'Agile Projektorganisation',
-        color: 'bg-chart-2',
-    },
-    {
-        component: TimelineSlide,
-        title: 'Phasenmodell',
-        subtitle: '42 Monate Design-Thinking',
-        color: 'bg-chart-3',
-    },
-    {
-        component: ClosingSlide,
-        title: 'Zusammenfassung',
-        subtitle: 'Kernmerkmale & Beiträge',
-        color: 'bg-primary',
-    },
-    {
-        component: ThankYouSlide,
-        title: 'Vielen Dank',
-        subtitle: 'Für Ihre Aufmerksamkeit',
-        color: 'bg-primary',
-    },
-];
 
 type ViewMode = 'presentation' | 'bibliography' | 'glossary' | 'contact';
 
@@ -319,7 +240,11 @@ function PresentationContent({
     onSlideChange: (index: SlideIndex) => void;
     onNavigateToMeta: (mode: ViewMode, fromSlide: SlideIndex) => void;
 }) {
-    const { isAuthenticated, isLoading, login, logout } = useAuth();
+    const { t } = useLanguage();
+    const { isLoaded, isSignedIn } = useUser();
+    const { signOut } = useClerk();
+    const isAuthenticated = !!isSignedIn;
+    const isLoading = !isLoaded;
 
     const [currentSlide, setCurrentSlide] = useState(routeSlideIndex);
     const [isTocOpen, setIsTocOpen] = useState(false);
@@ -327,6 +252,17 @@ function PresentationContent({
     const [expandedSlide, setExpandedSlide] = useState<string | null>(null);
 
     const viewMode = routeViewMode;
+    const localizedSlides = slides.map((slide) => ({
+        ...slide,
+        title: slide.titleKey ? t(slide.titleKey) : slide.title,
+        subtitle: slide.subtitleKey ? t(slide.subtitleKey) : slide.subtitle,
+    }));
+    const localizedSlidesConfig = slidesConfig.map((slideConfig, index) => ({
+        ...slideConfig,
+        title: slides[index]?.titleKey
+            ? t(slides[index].titleKey)
+            : slideConfig.title,
+    }));
 
     useEffect(() => {
         setCurrentSlide(routeSlideIndex);
@@ -413,7 +349,7 @@ function PresentationContent({
 
     // Show login screen if not authenticated
     if (!isAuthenticated) {
-        return <AuthCover onAuthenticate={login} />;
+        return <AuthCover />;
     }
 
     return (
@@ -422,7 +358,7 @@ function PresentationContent({
                 isOpen={isSettingsOpen}
                 onClose={() => setIsSettingsOpen(false)}
                 isAuthenticated={isAuthenticated}
-                onLogout={logout}
+                onLogout={() => signOut()}
                 onNavigateToMeta={handleViewModeChange}
                 currentView={viewMode}
             />
@@ -430,8 +366,10 @@ function PresentationContent({
             <TableOfContentsDrawer
                 isOpen={isTocOpen}
                 onClose={() => setIsTocOpen(false)}
-                slides={slidesConfig}
-                currentSlide={slidesConfig[currentSlide]?.id || 'title'}
+                slides={localizedSlidesConfig}
+                currentSlide={
+                    localizedSlidesConfig[currentSlide]?.id || 'title'
+                }
                 onNavigate={handleNavigation}
                 expandedSlide={expandedSlide}
                 onToggleSlide={(slideId: string) =>
@@ -440,7 +378,17 @@ function PresentationContent({
             />
 
             <div className="flex-1 overflow-auto">
-                {viewMode === 'presentation' && <CurrentSlideComponent />}
+                {viewMode === 'presentation' && (
+                    <Suspense
+                        fallback={
+                            <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                                Loading...
+                            </div>
+                        }
+                    >
+                        <CurrentSlideComponent />
+                    </Suspense>
+                )}
                 {viewMode === 'bibliography' && <BibliographyPage />}
                 {viewMode === 'glossary' && <GlossaryPage />}
                 {viewMode === 'contact' && <ContactPage />}
@@ -448,7 +396,7 @@ function PresentationContent({
 
             {viewMode === 'presentation' && (
                 <SlideNavigationBar
-                    slides={slides}
+                    slides={localizedSlides}
                     currentSlide={currentSlide}
                     onSlideChange={goToSlide}
                     onNext={nextSlide}
@@ -483,9 +431,9 @@ export default function App() {
     return (
         <ThemeProvider defaultTheme="light">
             <LanguageProvider>
-                <AuthProvider>
+                <MotionConfig reducedMotion="user">
                     <AppRoutes />
-                </AuthProvider>
+                </MotionConfig>
             </LanguageProvider>
         </ThemeProvider>
     );

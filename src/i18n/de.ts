@@ -26,9 +26,8 @@ export const de = {
     'auth.password': 'Passwort',
     'auth.submit': 'Entsperren',
     'auth.error': 'Falscher Benutzername oder Passwort.',
-    'auth.hint':
-        'Hinweis: Das ist ein einfacher Client-Schutz (wie ein "Türsteher") und ersetzt keine echte Server-Auth.',
-    'auth.protected': 'Protected content • Interview access only',
+    'auth.hint': 'Bitte mit Clerk-Benutzername und Passwort anmelden.',
+    'auth.protected': 'Geschützter Inhalt • Nur für Interviewzugang',
     'auth.showPassword': 'Passwort anzeigen',
     'auth.hidePassword': 'Passwort verbergen',
 
@@ -69,6 +68,19 @@ export const de = {
     'slide.timeline': 'Phasenmodell',
     'slide.closing': 'Zusammenfassung',
     'slide.thankyou': 'Vielen Dank',
+
+    // Slide subtitles
+    'slideSubtitle.title': 'DigiChildProtect Forschungsdesign',
+    'slideSubtitle.problem': 'Kindeswohlgefährdungen in Deutschland',
+    'slideSubtitle.questions': 'Sechs zentrale Fragen',
+    'slideSubtitle.methodology': 'Mixed-Methods-Design',
+    'slideSubtitle.stakeholders': 'Kern- und Systemkontext',
+    'slideSubtitle.workpackages': '11 Pakete zur Umsetzung',
+    'slideSubtitle.dataprotection': '5-Stufenmodell',
+    'slideSubtitle.interdisciplinary': 'Agile Projektorganisation',
+    'slideSubtitle.timeline': '42 Monate Design-Thinking',
+    'slideSubtitle.closing': 'Kernmerkmale & Beiträge',
+    'slideSubtitle.thankyou': 'Für Ihre Aufmerksamkeit',
 
     // Contact page
     'contact.title': 'Kontakt',

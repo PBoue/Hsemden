@@ -1,13 +1,40 @@
 import { motion } from 'motion/react';
 import { Lock } from 'lucide-react';
+import { useState, type FormEvent } from 'react';
+import { useSignIn } from '@clerk/clerk-react';
 import { useLanguage } from '@/app/context/LanguageContext';
 
-interface AuthCoverProps {
-    onAuthenticate: () => void;
-}
-
-export function AuthCover({ onAuthenticate }: AuthCoverProps) {
+export function AuthCover() {
     const { t } = useLanguage();
+    const { isLoaded, signIn, setActive } = useSignIn();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (!isLoaded || !signIn) return;
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            const result = await signIn.create({
+                identifier: username,
+                password,
+            });
+
+            if (result.status === 'complete') {
+                await setActive({ session: result.createdSessionId });
+            } else {
+                setError(t('common.error'));
+            }
+        } catch {
+            setError(t('auth.error'));
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="min-h-screen w-full bg-background flex items-center justify-center p-4">
@@ -112,13 +139,57 @@ export function AuthCover({ onAuthenticate }: AuthCoverProps) {
                             </p>
                         </div>
 
-                        <button
-                            type="button"
-                            onClick={onAuthenticate}
-                            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                        <form
+                            className="space-y-4"
+                            onSubmit={handleSubmit}
                         >
-                            {t('auth.submit')}
-                        </button>
+                            <div className="space-y-2 text-left">
+                                <label className="text-sm font-medium text-foreground">
+                                    {t('auth.username')}
+                                </label>
+                                <input
+                                    type="text"
+                                    autoComplete="username"
+                                    value={username}
+                                    onChange={(event) =>
+                                        setUsername(event.target.value)
+                                    }
+                                    className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                    required
+                                />
+                            </div>
+                            <div className="space-y-2 text-left">
+                                <label className="text-sm font-medium text-foreground">
+                                    {t('auth.password')}
+                                </label>
+                                <input
+                                    type="password"
+                                    autoComplete="current-password"
+                                    value={password}
+                                    onChange={(event) =>
+                                        setPassword(event.target.value)
+                                    }
+                                    className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                    required
+                                />
+                            </div>
+
+                            {error && (
+                                <div className="text-sm text-destructive">
+                                    {error}
+                                </div>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={!isLoaded || isSubmitting}
+                                className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
+                            >
+                                {isSubmitting
+                                    ? t('common.loading')
+                                    : t('auth.submit')}
+                            </button>
+                        </form>
 
                         <div className="mt-6 text-xs text-muted-foreground">
                             {t('auth.hint')}

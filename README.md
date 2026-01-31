@@ -1,11 +1,29 @@
+## DigiChildProtect Presentation
 
-  # Job Interview Presentation Design
+Interactive research design presentation built with Vite + React.
 
-  This is a code bundle for Job Interview Presentation Design. The original project is available at https://www.figma.com/design/uKD8dXka4hyYvE8dsZZAhR/Job-Interview-Presentation-Design.
+Live site: https://128.philippboue.de/
 
-  ## Running the code
+### Prerequisites
 
-  Run `npm i` to install the dependencies.
+- Node.js 20+
+- pnpm 9+
 
-  Run `npm run dev` to start the development server.
-  
+### Environment
+
+Create a .env file with your Clerk publishable key:
+
+- VITE_CLERK_PUBLISHABLE_KEY
+
+### Development
+
+1. Install dependencies: pnpm install
+2. Start dev server: pnpm dev
+
+### Production (static SSR)
+
+Generate the static site with server-side rendering and prerendering:
+
+- pnpm build:static
+
+The output is written to dist/client.

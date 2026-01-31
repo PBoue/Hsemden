@@ -14,17 +14,6 @@ import {
 import { useLanguage } from '@/app/context/LanguageContext';
 import { useTheme } from 'next-themes';
 
-export interface SlideSection {
-    id: string;
-    label: string;
-}
-
-export interface SlideConfig {
-    id: string;
-    title: string;
-    sections?: SlideSection[];
-}
-
 interface SettingsDrawerProps {
     isOpen: boolean;
     onClose: () => void;
