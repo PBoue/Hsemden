@@ -79,8 +79,9 @@ export function ProblemContextSlide() {
                             01 — KONTEXT
                         </span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-                        Kindeswohlgefährdungen in Deutschland
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight break-words hyphens-auto">
+                        <span className="block">Kindeswohlgefährdungen</span>
+                        <span className="block">in Deutschland</span>
                     </h1>
                     <p className="text-xl text-muted-foreground">
                         Aktuelle Herausforderungen und digitale Lösungsansätze

@@ -421,6 +421,8 @@ const IconComponent = ({
 export function NetworkVisualization() {
     const [hoveredNode, setHoveredNode] = useState<string | null>(null);
     const [selectedNode, setSelectedNode] = useState<string | null>(null);
+    const [activeRelationship, setActiveRelationship] =
+        useState<RelationshipType | null>(null);
 
     const getNodeColor = (
         node: Node,
@@ -443,7 +445,12 @@ export function NetworkVisualization() {
     };
 
     const getConnectionOpacity = (connection: Connection) => {
+        const isFiltered =
+            activeRelationship &&
+            connection.relationshipType !== activeRelationship;
+
         if (!hoveredNode && !selectedNode) {
+            if (isFiltered) return 0.1;
             // Default visibility based on strength
             return connection.strength === 'strong'
                 ? 0.5
@@ -453,13 +460,14 @@ export function NetworkVisualization() {
         }
         const activeNode = selectedNode || hoveredNode;
         if (connection.from === activeNode || connection.to === activeNode) {
+            if (isFiltered) return 0.1;
             return connection.strength === 'strong'
                 ? 0.9
                 : connection.strength === 'medium'
                   ? 0.7
                   : 0.5;
         }
-        return 0.1;
+        return isFiltered ? 0.05 : 0.1;
     };
 
     const getConnectionStyle = (
@@ -493,6 +501,16 @@ export function NetworkVisualization() {
     const activeNode = nodes.find(
         (n) => n.id === (selectedNode || hoveredNode),
     );
+    const filteredNodeIds = activeRelationship
+        ? new Set(
+              connections
+                  .filter(
+                      (connection) =>
+                          connection.relationshipType === activeRelationship,
+                  )
+                  .flatMap((connection) => [connection.from, connection.to]),
+          )
+        : null;
 
     return (
         <div className="relative w-full h-full bg-card/30 rounded-lg border border-border overflow-hidden">
@@ -559,6 +577,8 @@ export function NetworkVisualization() {
                         (!hoveredNode && !selectedNode) ||
                         isHovered ||
                         isSelected;
+                    const isFilteredOut =
+                        filteredNodeIds && !filteredNodeIds.has(node.id);
                     const radius = getNodeRadius(node);
                     const isCenter = node.id === 'kind';
 
@@ -589,7 +609,13 @@ export function NetworkVisualization() {
                                 r={radius}
                                 fill={getNodeColor(node, isHovered, isSelected)}
                                 opacity={
-                                    isHighlighted ? (isCenter ? 1 : 0.95) : 0.3
+                                    isFilteredOut
+                                        ? 0.4
+                                        : isHighlighted
+                                          ? isCenter
+                                              ? 1
+                                              : 0.95
+                                          : 0.3
                                 }
                                 onMouseEnter={() => setHoveredNode(node.id)}
                                 onMouseLeave={() => setHoveredNode(null)}
@@ -630,7 +656,11 @@ export function NetworkVisualization() {
                                         width: '100%',
                                         height: '100%',
                                         color: 'white',
-                                        opacity: isHighlighted ? 1 : 0.3,
+                                        opacity: isFilteredOut
+                                            ? 0.4
+                                            : isHighlighted
+                                              ? 1
+                                              : 0.3,
                                     }}
                                 >
                                     <IconComponent
@@ -648,14 +678,24 @@ export function NetworkVisualization() {
                                 fontSize={isCenter ? '3' : '2.2'}
                                 fontWeight={isCenter ? 'bold' : 'normal'}
                                 fill="hsl(var(--foreground))"
-                                opacity={isHighlighted ? 0.95 : 0.4}
+                                opacity={
+                                    isFilteredOut
+                                        ? 0.4
+                                        : isHighlighted
+                                          ? 0.95
+                                          : 0.4
+                                }
                                 style={{
                                     pointerEvents: 'none',
                                     userSelect: 'none',
                                 }}
                                 initial={{ opacity: 0 }}
                                 animate={{
-                                    opacity: isHighlighted ? 0.95 : 0.4,
+                                    opacity: isFilteredOut
+                                        ? 0.4
+                                        : isHighlighted
+                                          ? 0.95
+                                          : 0.4,
                                 }}
                                 transition={{ delay: idx * 0.04 + 0.3 }}
                             >
@@ -749,7 +789,7 @@ export function NetworkVisualization() {
             </AnimatePresence>
 
             {/* Enhanced Legend */}
-            <div className="absolute top-4 right-4 bg-popover/95 backdrop-blur border border-border rounded-lg p-4 text-xs space-y-3 max-w-[200px]">
+            <div className="absolute top-4 right-4 bg-popover/95 backdrop-blur border border-border rounded-lg p-4 text-xs space-y-3 max-w-[200px] hidden md:block">
                 {/* Stakeholder Types */}
                 <div>
                     <div className="font-semibold text-foreground mb-2">
@@ -811,7 +851,19 @@ export function NetworkVisualization() {
                         Beziehungstypen
                     </div>
                     <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setActiveRelationship((prev) =>
+                                    prev === 'direkt' ? null : 'direkt',
+                                )
+                            }
+                            className={`flex items-center gap-2 w-full text-left rounded px-1 py-0.5 transition-colors ${
+                                activeRelationship === 'direkt'
+                                    ? 'bg-primary/10 text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
                             <svg
                                 width="20"
                                 height="2"
@@ -826,11 +878,21 @@ export function NetworkVisualization() {
                                     strokeWidth="2"
                                 />
                             </svg>
-                            <span className="text-muted-foreground">
-                                Direkt
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
+                            <span>Direkt</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setActiveRelationship((prev) =>
+                                    prev === 'beratend' ? null : 'beratend',
+                                )
+                            }
+                            className={`flex items-center gap-2 w-full text-left rounded px-1 py-0.5 transition-colors ${
+                                activeRelationship === 'beratend'
+                                    ? 'bg-primary/10 text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
                             <svg
                                 width="20"
                                 height="2"
@@ -846,11 +908,21 @@ export function NetworkVisualization() {
                                     strokeDasharray="2,2"
                                 />
                             </svg>
-                            <span className="text-muted-foreground">
-                                Beratend
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
+                            <span>Beratend</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setActiveRelationship((prev) =>
+                                    prev === 'rechtlich' ? null : 'rechtlich',
+                                )
+                            }
+                            className={`flex items-center gap-2 w-full text-left rounded px-1 py-0.5 transition-colors ${
+                                activeRelationship === 'rechtlich'
+                                    ? 'bg-primary/10 text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
                             <svg
                                 width="20"
                                 height="2"
@@ -866,11 +938,21 @@ export function NetworkVisualization() {
                                     strokeDasharray="4,2"
                                 />
                             </svg>
-                            <span className="text-muted-foreground">
-                                Rechtlich
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
+                            <span>Rechtlich</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setActiveRelationship((prev) =>
+                                    prev === 'fördernd' ? null : 'fördernd',
+                                )
+                            }
+                            className={`flex items-center gap-2 w-full text-left rounded px-1 py-0.5 transition-colors ${
+                                activeRelationship === 'fördernd'
+                                    ? 'bg-primary/10 text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
                             <svg
                                 width="20"
                                 height="2"
@@ -886,10 +968,8 @@ export function NetworkVisualization() {
                                     strokeDasharray="1,3"
                                 />
                             </svg>
-                            <span className="text-muted-foreground">
-                                Fördernd
-                            </span>
-                        </div>
+                            <span>Fördernd</span>
+                        </button>
                     </div>
                 </div>
             </div>
