@@ -401,7 +401,6 @@ function PresentationContent({
                     onSlideChange={goToSlide}
                     onNext={nextSlide}
                     onPrev={prevSlide}
-                    onHome={() => onSlideChange(0)}
                     onTocToggle={() => {
                         setIsTocOpen(!isTocOpen);
                         setIsSettingsOpen(false);

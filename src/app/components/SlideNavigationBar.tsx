@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-    ChevronLeft,
-    ChevronRight,
-    Home,
-    Maximize,
-    Minimize,
-    Menu,
-    List,
-    Settings,
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, List, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +15,6 @@ interface SlideNavigationBarProps {
     onSlideChange: (index: number) => void;
     onNext: () => void;
     onPrev: () => void;
-    onHome: () => void;
     onTocToggle: () => void;
     onSettingsToggle: () => void;
 }
@@ -35,48 +25,10 @@ export function SlideNavigationBar({
     onSlideChange,
     onNext,
     onPrev,
-    onHome,
     onTocToggle,
     onSettingsToggle,
 }: SlideNavigationBarProps) {
     const [hoveredSlide, setHoveredSlide] = useState<number | null>(null);
-    const [isFullscreen, setIsFullscreen] = useState(false);
-    const [fullscreenSupported, setFullscreenSupported] = useState(true);
-
-    useEffect(() => {
-        // Check if fullscreen is supported
-        setFullscreenSupported(!!document.documentElement.requestFullscreen);
-
-        // Listen for fullscreen changes
-        const handleFullscreenChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
-        };
-
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => {
-            document.removeEventListener(
-                'fullscreenchange',
-                handleFullscreenChange,
-            );
-        };
-    }, []);
-
-    const toggleFullscreen = async () => {
-        if (!fullscreenSupported) {
-            return;
-        }
-
-        try {
-            if (!document.fullscreenElement) {
-                await document.documentElement.requestFullscreen();
-            } else {
-                await document.exitFullscreen();
-            }
-        } catch (err) {
-            // Silently fail - fullscreen might not be available in this context
-            setFullscreenSupported(false);
-        }
-    };
 
     useEffect(() => {
         const currentRef = document.querySelector(
@@ -94,8 +46,8 @@ export function SlideNavigationBar({
             aria-label="Presentation navigation"
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
-                {/* Mobile - Prev / Counter / Next */}
-                <div className="flex items-center gap-2 md:hidden">
+                {/* Prev / Counter / Next */}
+                <div className="flex items-center gap-2">
                     <button
                         onClick={onPrev}
                         disabled={currentSlide === 0}
@@ -125,29 +77,8 @@ export function SlideNavigationBar({
                     </button>
                 </div>
 
-                {/* Desktop - Home button and counter */}
-                <div className="hidden md:flex items-center gap-3">
-                    <button
-                        onClick={onHome}
-                        disabled={currentSlide === 0}
-                        className={cn(
-                            'inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50',
-                        )}
-                        aria-label="Go to first slide"
-                    >
-                        <Home className="h-4 w-4" />
-                    </button>
-                    <span
-                        className="text-sm text-muted-foreground whitespace-nowrap"
-                        aria-live="polite"
-                        aria-atomic="true"
-                    >
-                        Folie {currentSlide + 1} / {slides.length}
-                    </span>
-                </div>
-
                 {/* Center - Slide progress bars with hover previews (desktop only) */}
-                <div className="hidden md:flex flex-1 mx-8 max-w-3xl relative">
+                <div className="hidden md:flex flex-1 mx-6 max-w-3xl relative">
                     <div
                         className="flex gap-2"
                         role="tablist"
@@ -159,6 +90,7 @@ export function SlideNavigationBar({
                                 className="flex-1 relative group"
                             >
                                 <button
+                                    data-slide-index={index}
                                     onClick={() => onSlideChange(index)}
                                     onMouseEnter={() => setHoveredSlide(index)}
                                     onMouseLeave={() => setHoveredSlide(null)}
@@ -241,50 +173,8 @@ export function SlideNavigationBar({
                     </div>
                 </div>
 
-                {/* Right side - Navigation controls */}
+                {/* Right side - Menu controls */}
                 <div className="flex items-center gap-2">
-                    <div className="hidden md:flex items-center gap-2">
-                        <button
-                            onClick={onPrev}
-                            disabled={currentSlide === 0}
-                            className={cn(
-                                'inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50',
-                            )}
-                            aria-label="Previous slide"
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                        </button>
-                        <button
-                            onClick={onNext}
-                            disabled={currentSlide === slides.length - 1}
-                            className={cn(
-                                'inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50',
-                            )}
-                            aria-label="Next slide"
-                        >
-                            <ChevronRight className="h-4 w-4" />
-                        </button>
-                        <div className="w-px h-6 bg-border mx-1" />
-                    </div>
-                    {fullscreenSupported && (
-                        <button
-                            onClick={toggleFullscreen}
-                            className={cn(
-                                'hidden md:inline-flex items-center justify-center h-10 w-10 rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-                            )}
-                            aria-label={
-                                isFullscreen
-                                    ? 'Exit fullscreen'
-                                    : 'Enter fullscreen'
-                            }
-                        >
-                            {isFullscreen ? (
-                                <Minimize className="h-4 w-4" />
-                            ) : (
-                                <Maximize className="h-4 w-4" />
-                            )}
-                        </button>
-                    )}
                     <button
                         onClick={onTocToggle}
                         className={cn(

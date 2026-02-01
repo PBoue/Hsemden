@@ -138,7 +138,7 @@ export function TimelineSlide() {
                     className="space-y-6"
                 >
                     <h2 className="text-2xl font-bold text-foreground">
-                        1. Projektplan (Gantt-Darstellung)
+                        1. Projektplan
                     </h2>
 
                     <div className="bg-card border border-border rounded-lg p-6">
