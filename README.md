@@ -2,7 +2,7 @@
 
 Interactive research design presentation built with Vite + React.
 
-Live site: https://128.philippboue.de/
+Live site: https://forschungsdesign.philippboue.de/
 
 ### Prerequisites
 
